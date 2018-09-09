@@ -14,4 +14,4 @@ https://github.com/Roger-WIN/GBKtoUTF-8/releases
 
 .NET Framework 4.7 及以上。
 
-Windows 10 版本 1703 及以上版本已预装，无需另外安装。
+[Windows 10 版本](ms-settings:about) 1703 及以上版本已预装，无需另外安装。
