@@ -28,21 +28,21 @@ namespace WinFormsApp
             var folderDialog = new FolderBrowserDialog
             {
                 Description = "选择待转换文件夹",
-                ShowNewFolderButton = false
+                ShowNewFolderButton = false // 不允许在该对话框中新建文件夹
             };
 
             if (folderDialog.ShowDialog() == DialogResult.OK)
             {
                 Directory = folderDialog.SelectedPath;
 
-                var theFolder = new DirectoryInfo(Directory);
-                var theFiles = theFolder.GetFiles();
+                var theFolder = new DirectoryInfo(Directory); // 定位到转换文件夹
+                var theFiles = theFolder.GetFiles(); // 获取该目录下的所有文件
 
-                if (theFiles.Length > 0)
+                if (theFiles.Length > 0) // 该目录非空
                 {
-                    Files = new List<string>();
+                    Files = new List<string>(); // 创建文件列表
 
-                    foreach (var file in theFiles) Files.Add(file.FullName);
+                    foreach (var file in theFiles) Files.Add(file.FullName); // 将该目录下的所有文件添加到文件列表
                 }
             }
 

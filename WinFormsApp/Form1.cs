@@ -22,20 +22,20 @@ namespace WinFormsApp
 
         public void ShowFiles(List<string> files, List<string> binaryFileNames)
         {
-            if (binaryFileNames != null)
+            if (binaryFileNames != null) // 若选取的文件中包含二进制文件
             {
-                var message = string.Empty;
+                var message = string.Empty; // 生成提示信息
 
                 for (var i = 0; i < binaryFileNames.Count; i++)
                 {
-                    message += "「" + binaryFileNames[i] + "」";
+                    message += "「" + binaryFileNames[i] + "」"; // 提示信息中加入该二进制文件的文件名
                     if (i >= binaryFileNames.Count - 1)
                         continue;
-                    message += "、";
+                    message += "、"; // 使用顿号连接各文件名
                 }
 
                 message += "不是文本文件，不可转换。";
-                MessageBox.Show(message);
+                MessageBox.Show(message); // 显示提示信息
             }
 
             if (files == null)
@@ -44,15 +44,16 @@ namespace WinFormsApp
             textBox_file.Clear();
             var count = files.Count;
 
-            if (count == 1)
-                textBox_file.Text = files[0];
-            else
+            // 下面在文本框中显示选取的若干文件的文件名
+            if (count == 1) // 若只有一个文件
+                textBox_file.Text = files[0]; // 直接显示文件名
+            else // 若不止一个文件
                 for (var i = 0; i < count; i++)
                 {
-                    textBox_file.Text += "\"" + files[i] + "\"";
+                    textBox_file.Text += "\"" + files[i] + "\""; // 在文件名两边加上半角引号
                     if (i >= count - 1)
                         continue;
-                    textBox_file.Text += " ";
+                    textBox_file.Text += " "; // 使用空格分隔各文件名
                 }
 
             // TODO
@@ -61,20 +62,20 @@ namespace WinFormsApp
 
         public void ShowDirectory(string directory, List<string> files, List<string> binaryFileNames)
         {
-            if (binaryFileNames != null)
+            if (binaryFileNames != null) // 若选取的文件中包含二进制文件
             {
-                var message = string.Empty;
+                var message = string.Empty; // 生成提示信息
 
                 for (var i = 0; i < binaryFileNames.Count; i++)
                 {
-                    message += "「" + binaryFileNames[i] + "」";
+                    message += "「" + binaryFileNames[i] + "」"; // 提示信息中加入该二进制文件的文件名
                     if (i >= binaryFileNames.Count - 1)
                         continue;
-                    message += "、";
+                    message += "、"; // 使用顿号连接各文件名
                 }
 
                 message += "不是文本文件，不可转换。";
-                MessageBox.Show(message);
+                MessageBox.Show(message); // 显示提示信息
             }
 
             if (directory == null)
@@ -101,7 +102,7 @@ namespace WinFormsApp
         private void button_file_Click(object sender, EventArgs e)
         {
             var filesChoose = new Choose();
-            var files = filesChoose.ChooseFiles();
+            var files = filesChoose.ChooseFiles(); // 选择文件
 
             try
             {
@@ -113,7 +114,7 @@ namespace WinFormsApp
             }
 
             var filesCheck = new Check();
-            var binaryFileNames = filesCheck.FilterTextFile(ref Files);
+            var binaryFileNames = filesCheck.FilterTextFile(ref Files); // 过滤文件
 
             ShowFiles(Files, binaryFileNames);
         }
@@ -121,7 +122,7 @@ namespace WinFormsApp
         private void button_directory_Click(object sender, EventArgs e)
         {
             var directoryChoose = new Choose();
-            var (directory, files) = directoryChoose.ChooseDirectory();
+            var (directory, files) = directoryChoose.ChooseDirectory(); // 选择目录
 
             try
             {
