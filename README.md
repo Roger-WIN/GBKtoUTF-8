@@ -1,6 +1,6 @@
 # GBKtoUTF-8
 
-Gadget that transcodes text files from GBK to UTF-8.
+This is a gadget that transcodes text files from GBK to UTF-8.
 
 ![](https://i.loli.net/2018/09/09/5b9495b648bec.png)
 
@@ -16,4 +16,4 @@ https://github.com/Roger-WIN/GBKtoUTF-8/releases
 
 You can download the latest .NET Framework Runtime at [here](https://www.microsoft.com/net/download/dotnet-framework-runtime).
 
-Or you can directly download .NET Framework 4.7 at [here](https://www.microsoft.com/zh-CN/download/details.aspx?id=55167).
+Or you can directly download .NET Framework 4.7 at [here](https://www.microsoft.com/net/download/thank-you/net47).
