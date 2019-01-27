@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace WinFormsApp
@@ -20,30 +21,25 @@ namespace WinFormsApp
         // 检查指定路径的文件是否是文本文件
         private bool IsTextFile(string filePath)
         {
-            var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read); // 根据路径，打开文件并读取
-            var flag = true; // 是否是文本文件的标识。首先假设是
             try
             {
-                for (var i = 0; i < Convert.ToInt32(fileStream.Length); i++) // 从文件的开头开始读取
-                {
-                    var data = Convert.ToByte(fileStream.ReadByte()); // 读取每一个字节
-                    if (data == 0) // 只要有一个字节为 0
-                    {
-                        flag = false; // 不是文本文件
-                        break;
-                    }
-                }
+                var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read); // 以读权限打开文件并读取
+                var fileBytes = new byte[fileStream.Length]; // 利用文件流的长度创建新的字节数组
+                fileStream.Read(fileBytes, 0, fileBytes.Length); // 从文件流中读取字节块并写入字节流
+                fileStream.Close(); // 关闭文件流
+                var fileByteList = fileBytes.ToList(); // 利用字节数组创建字节列表
+                return !fileByteList.Contains(0); // 若存在字节 0，则不是文本文件
             }
-            catch (Exception ex)
+            catch (FileNotFoundException)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("未找到文件");
+                return false;
             }
-            finally
+            catch (Exception e)
             {
-                fileStream.Close(); // 关闭文件
+                MessageBox.Show(e.Message);
+                return false;
             }
-
-            return flag;
         }
 
         // 从若干文件中过滤出文本文件
