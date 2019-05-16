@@ -14,6 +14,6 @@ https://github.com/Roger-WIN/GBKtoUTF-8/releases
 
 .NET Framework 4.7 or higher (already preinstalled in [Windows 10 Version](ms-settings:about) 1703 or higher) is required.
 
-You can download the latest .NET Framework Runtime at [here](https://www.microsoft.com/net/download/dotnet-framework-runtime).
+You can download the latest .NET Framework Runtime at [here](https://dotnet.microsoft.com/download/thank-you/net48).
 
-Or you can directly download .NET Framework 4.7 at [here](https://www.microsoft.com/net/download/thank-you/net47).
+Or you can directly download .NET Framework 4.7 at [here](https://dotnet.microsoft.com/download/thank-you/net47).
