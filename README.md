@@ -1,19 +1,17 @@
 # GBKtoUTF-8
 
-This is a gadget that transcodes text files from GBK to UTF-8.
+这是一个将文本文件由 GBK 转码为 UTF-8 的小工具。
 
-![](https://i.loli.net/2018/09/09/5b9495b648bec.png)
+![image-20210605230424433](https://img.rogerkung-win.top/undefinedimage-20210605230424433.png)
 
-You can select multiple files, or you can select one folder. But they cannot be selected at the same time.
+可以选择多个文件，或者选择一个文件夹（支持在子文件夹中查找），但二者不可同时选择。
 
-## Download
+## 下载
 
-https://github.com/Roger-WIN/GBKtoUTF-8/releases
+https://github.com/Roger-WIN/GBKtoUTF-8/releases/latest
 
-## System requirements
+## 系统要求
 
-.NET Framework 4.7 or higher (already preinstalled in [Windows 10 Version](ms-settings:about) 1703 or higher) is required.
+.NET Framework 4.8 或更高（预装于 [Windows 10 Version](ms-settings:about) 1903 或更高版本中）。
 
-You can download the latest .NET Framework Runtime at [here](https://dotnet.microsoft.com/download/thank-you/net48).
-
-Or you can directly download .NET Framework 4.7 at [here](https://dotnet.microsoft.com/download/thank-you/net47).
+可点击[此处](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net48-web-installer)下载 .NET Framework 4.8 运行时。
