@@ -128,7 +128,7 @@ namespace WinFormsApp
                 if (Files != null) // 已选取转换文件
                     service.DownLoadFiles(service.TranscodeFiles(service.UploadFiles(Files), checkBox_BOM.Checked, checkBox_override.Checked), Output);
                 else if (Directory != null) // 已选取转换文件夹
-                    service.DownLoadFiles(service.TranscodeFiles(service.UploadFolder(Directory), checkBox_BOM.Checked, checkBox_override.Checked), Output);
+                    service.DownLoadFiles(service.TranscodeFiles(service.UploadFolder(Directory, checkBox_recur.Checked), checkBox_BOM.Checked, checkBox_override.Checked), Output);
                 else // 二者均未选择
                     throw new ArgumentNullException("转换文件和转换文件夹均未选择");
 

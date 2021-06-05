@@ -54,20 +54,54 @@ namespace WinFormsApp
         }
 
         /* 上传文件夹，返回其中的文件在服务上保存的路径。若为空目录，返回空 */
-        public string[] UploadFolder(string folderPath)
+        public string[] UploadFolder(string folderPath, bool recurFlag)
         {
             if (!Directory.Exists(folderPath)) // 目录不存在
                 throw new DirectoryNotFoundException("未找到该目录");
 
             var theFolder = new DirectoryInfo(folderPath); // 定位到选取的文件夹
-            var theFiles = theFolder.GetFiles(); // 获取该目录下的所有文件
-            if (theFiles.Length <= 0) // 该目录为空
+
+            List<FileInfo> theFiles;
+            // 递归查找文件夹
+            if (recurFlag)
+            {
+                theFiles = new List<FileInfo>();
+                FetchFolderFiles(theFolder, theFiles);
+            }
+            else
+            {
+                theFiles = FetchFolderFiles(theFolder);
+            }
+
+            if (theFiles.Count <= 0) // 该目录为空
                 throw new IOException("目录为空");
 
-            var filePaths = new List<string>(theFiles.Length); // 创建文件路径列表
+            var filePaths = new List<string>(theFiles.Count); // 创建文件路径列表
             foreach (var file in theFiles)
                 filePaths.Add(file.FullName); // 将该目录下的所有文件添加到文件路径列表
             return UploadFiles(filePaths.ToArray()); // 将该目录下的所有文件上传
+        }
+
+        // 获取文件夹下的文件
+        private List<FileInfo> FetchFolderFiles(DirectoryInfo rootDir) => new List<FileInfo>(rootDir.GetFiles());
+
+        // 获取文件夹（及其子文件夹）下的文件
+        private void FetchFolderFiles(DirectoryInfo rootDir, List<FileInfo> fileList)
+        {
+            // 获取子文件，并添加到集合中
+            var files = rootDir.GetFiles();
+            if (files != null && files.Length > 0)
+            {
+                fileList.AddRange(files);
+            }
+
+            // 获取子文件夹
+            var subDirs = rootDir.GetDirectories();
+            if (subDirs != null && subDirs.Length > 0)
+            {
+                // 对每个子文件夹递归执行当前方法
+                Array.ForEach(subDirs, subDir => FetchFolderFiles(subDir, fileList));
+            }
         }
 
         /* 转换指定路径的文件，并返回转换后的文件保存在服务上的路径 */

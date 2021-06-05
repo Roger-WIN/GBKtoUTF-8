@@ -47,6 +47,7 @@
             this.checkBox_override = new System.Windows.Forms.CheckBox();
             this.checkBox_sameOutput = new System.Windows.Forms.CheckBox();
             this.checkBox_openOutput = new System.Windows.Forms.CheckBox();
+            this.checkBox_recur = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
@@ -81,7 +82,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(940, 296);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1083, 296);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // button_chooseOutput
@@ -90,9 +91,9 @@
             this.button_chooseOutput.AutoSize = true;
             this.button_chooseOutput.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.button_chooseOutput.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button_chooseOutput.Location = new System.Drawing.Point(755, 226);
+            this.button_chooseOutput.Location = new System.Drawing.Point(868, 226);
             this.button_chooseOutput.Name = "button_chooseOutput";
-            this.button_chooseOutput.Size = new System.Drawing.Size(88, 40);
+            this.button_chooseOutput.Size = new System.Drawing.Size(102, 40);
             this.button_chooseOutput.TabIndex = 9;
             this.button_chooseOutput.Text = "选择";
             this.button_chooseOutput.UseVisualStyleBackColor = false;
@@ -104,9 +105,9 @@
             this.button_chooseDirectory.AutoSize = true;
             this.button_chooseDirectory.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.button_chooseDirectory.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button_chooseDirectory.Location = new System.Drawing.Point(755, 127);
+            this.button_chooseDirectory.Location = new System.Drawing.Point(868, 127);
             this.button_chooseDirectory.Name = "button_chooseDirectory";
-            this.button_chooseDirectory.Size = new System.Drawing.Size(88, 40);
+            this.button_chooseDirectory.Size = new System.Drawing.Size(102, 40);
             this.button_chooseDirectory.TabIndex = 8;
             this.button_chooseDirectory.Text = "选择";
             this.button_chooseDirectory.UseVisualStyleBackColor = false;
@@ -153,10 +154,10 @@
             this.textBox_file.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_file.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.textBox_file.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.textBox_file.Location = new System.Drawing.Point(144, 31);
+            this.textBox_file.Location = new System.Drawing.Point(165, 31);
             this.textBox_file.Name = "textBox_file";
             this.textBox_file.ReadOnly = true;
-            this.textBox_file.Size = new System.Drawing.Size(605, 35);
+            this.textBox_file.Size = new System.Drawing.Size(697, 35);
             this.textBox_file.TabIndex = 4;
             // 
             // textBox_directory
@@ -164,10 +165,10 @@
             this.textBox_directory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_directory.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.textBox_directory.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.textBox_directory.Location = new System.Drawing.Point(144, 129);
+            this.textBox_directory.Location = new System.Drawing.Point(165, 129);
             this.textBox_directory.Name = "textBox_directory";
             this.textBox_directory.ReadOnly = true;
-            this.textBox_directory.Size = new System.Drawing.Size(605, 35);
+            this.textBox_directory.Size = new System.Drawing.Size(697, 35);
             this.textBox_directory.TabIndex = 5;
             // 
             // textBox_output
@@ -175,10 +176,10 @@
             this.textBox_output.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_output.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.textBox_output.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.textBox_output.Location = new System.Drawing.Point(144, 228);
+            this.textBox_output.Location = new System.Drawing.Point(165, 228);
             this.textBox_output.Name = "textBox_output";
             this.textBox_output.ReadOnly = true;
-            this.textBox_output.Size = new System.Drawing.Size(605, 35);
+            this.textBox_output.Size = new System.Drawing.Size(697, 35);
             this.textBox_output.TabIndex = 6;
             // 
             // button_file
@@ -187,9 +188,9 @@
             this.button_file.AutoSize = true;
             this.button_file.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.button_file.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button_file.Location = new System.Drawing.Point(755, 29);
+            this.button_file.Location = new System.Drawing.Point(868, 29);
             this.button_file.Name = "button_file";
-            this.button_file.Size = new System.Drawing.Size(88, 40);
+            this.button_file.Size = new System.Drawing.Size(102, 40);
             this.button_file.TabIndex = 7;
             this.button_file.Text = "选择";
             this.button_file.UseVisualStyleBackColor = false;
@@ -201,9 +202,9 @@
             this.button_openDirectory.AutoSize = true;
             this.button_openDirectory.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.button_openDirectory.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button_openDirectory.Location = new System.Drawing.Point(849, 127);
+            this.button_openDirectory.Location = new System.Drawing.Point(976, 127);
             this.button_openDirectory.Name = "button_openDirectory";
-            this.button_openDirectory.Size = new System.Drawing.Size(88, 40);
+            this.button_openDirectory.Size = new System.Drawing.Size(104, 40);
             this.button_openDirectory.TabIndex = 10;
             this.button_openDirectory.Text = "打开";
             this.button_openDirectory.UseVisualStyleBackColor = false;
@@ -215,9 +216,9 @@
             this.button_openOutput.AutoSize = true;
             this.button_openOutput.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.button_openOutput.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button_openOutput.Location = new System.Drawing.Point(849, 226);
+            this.button_openOutput.Location = new System.Drawing.Point(976, 226);
             this.button_openOutput.Name = "button_openOutput";
-            this.button_openOutput.Size = new System.Drawing.Size(88, 40);
+            this.button_openOutput.Size = new System.Drawing.Size(104, 40);
             this.button_openOutput.TabIndex = 11;
             this.button_openOutput.Text = "打开";
             this.button_openOutput.UseVisualStyleBackColor = false;
@@ -230,7 +231,7 @@
             this.button_convert.BackColor = System.Drawing.SystemColors.MenuHighlight;
             this.button_convert.Font = new System.Drawing.Font("微软雅黑", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.button_convert.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.button_convert.Location = new System.Drawing.Point(854, 3);
+            this.button_convert.Location = new System.Drawing.Point(977, 3);
             this.button_convert.Name = "button_convert";
             this.button_convert.Size = new System.Drawing.Size(83, 52);
             this.button_convert.TabIndex = 0;
@@ -243,7 +244,7 @@
             this.checkBox_BOM.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.checkBox_BOM.AutoSize = true;
             this.checkBox_BOM.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.checkBox_BOM.Location = new System.Drawing.Point(3, 12);
+            this.checkBox_BOM.Location = new System.Drawing.Point(174, 12);
             this.checkBox_BOM.Name = "checkBox_BOM";
             this.checkBox_BOM.Size = new System.Drawing.Size(134, 34);
             this.checkBox_BOM.TabIndex = 2;
@@ -256,23 +257,25 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel2.AutoSize = true;
             this.tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel2.ColumnCount = 5;
+            this.tableLayoutPanel2.ColumnCount = 6;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Controls.Add(this.checkBox_override, 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.checkBox_BOM, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.button_convert, 4, 0);
-            this.tableLayoutPanel2.Controls.Add(this.checkBox_sameOutput, 2, 0);
-            this.tableLayoutPanel2.Controls.Add(this.checkBox_openOutput, 3, 0);
+            this.tableLayoutPanel2.Controls.Add(this.checkBox_override, 2, 0);
+            this.tableLayoutPanel2.Controls.Add(this.checkBox_BOM, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.button_convert, 5, 0);
+            this.tableLayoutPanel2.Controls.Add(this.checkBox_sameOutput, 3, 0);
+            this.tableLayoutPanel2.Controls.Add(this.checkBox_openOutput, 4, 0);
+            this.tableLayoutPanel2.Controls.Add(this.checkBox_recur, 0, 0);
             this.tableLayoutPanel2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tableLayoutPanel2.Location = new System.Drawing.Point(21, 345);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(940, 58);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(1083, 58);
             this.tableLayoutPanel2.TabIndex = 3;
             // 
             // checkBox_override
@@ -280,7 +283,7 @@
             this.checkBox_override.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.checkBox_override.AutoSize = true;
             this.checkBox_override.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.checkBox_override.Location = new System.Drawing.Point(143, 12);
+            this.checkBox_override.Location = new System.Drawing.Point(314, 12);
             this.checkBox_override.Name = "checkBox_override";
             this.checkBox_override.Size = new System.Drawing.Size(144, 34);
             this.checkBox_override.TabIndex = 3;
@@ -293,7 +296,7 @@
             this.checkBox_sameOutput.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.checkBox_sameOutput.AutoSize = true;
             this.checkBox_sameOutput.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.checkBox_sameOutput.Location = new System.Drawing.Point(293, 12);
+            this.checkBox_sameOutput.Location = new System.Drawing.Point(464, 12);
             this.checkBox_sameOutput.Name = "checkBox_sameOutput";
             this.checkBox_sameOutput.Size = new System.Drawing.Size(207, 34);
             this.checkBox_sameOutput.TabIndex = 4;
@@ -306,19 +309,31 @@
             this.checkBox_openOutput.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.checkBox_openOutput.AutoSize = true;
             this.checkBox_openOutput.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.checkBox_openOutput.Location = new System.Drawing.Point(506, 12);
+            this.checkBox_openOutput.Location = new System.Drawing.Point(677, 12);
             this.checkBox_openOutput.Name = "checkBox_openOutput";
             this.checkBox_openOutput.Size = new System.Drawing.Size(291, 34);
             this.checkBox_openOutput.TabIndex = 5;
             this.checkBox_openOutput.Text = "转换成功后打开输出文件夹";
             this.checkBox_openOutput.UseVisualStyleBackColor = true;
             // 
+            // checkBox_recur
+            // 
+            this.checkBox_recur.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBox_recur.AutoSize = true;
+            this.checkBox_recur.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.checkBox_recur.Location = new System.Drawing.Point(3, 12);
+            this.checkBox_recur.Name = "checkBox_recur";
+            this.checkBox_recur.Size = new System.Drawing.Size(165, 34);
+            this.checkBox_recur.TabIndex = 1;
+            this.checkBox_recur.Text = "包含子文件夹";
+            this.checkBox_recur.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(978, 420);
+            this.ClientSize = new System.Drawing.Size(1121, 420);
             this.Controls.Add(this.tableLayoutPanel2);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -354,6 +369,7 @@
         private System.Windows.Forms.CheckBox checkBox_openOutput;
         private System.Windows.Forms.CheckBox checkBox_sameOutput;
         private System.Windows.Forms.CheckBox checkBox_override;
+        private System.Windows.Forms.CheckBox checkBox_recur;
     }
 }
 
