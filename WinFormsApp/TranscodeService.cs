@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace WinFormsApp
 {
@@ -14,19 +15,15 @@ namespace WinFormsApp
             pathToUploadedFiles = "Files/Uploaded/"; // 指定上传的文件在服务中保存的目录
             pathToConvertedFiles = "Files/Converted/"; // 指定转换后的文件在服务中保存的目录
 
-            if (!Directory.Exists(pathToUploadedFiles)) // 若上传的文件在服务中保存的目录不存在
-                Directory.CreateDirectory(pathToUploadedFiles); // 则创建
-            if (!Directory.Exists(pathToConvertedFiles)) // 若转换后的文件在服务中保存的目录不存在
-                Directory.CreateDirectory(pathToConvertedFiles); // 则创建
+            Directory.CreateDirectory(pathToUploadedFiles);
+            Directory.CreateDirectory(pathToConvertedFiles);
         }
 
         /* 上传文件，返回这些文件在服务上保存的路径 */
         public string[] UploadFiles(string[] filePaths)
         {
-            var uploadedFilePaths = new List<string>(filePaths.Length);
-            foreach (var filePath in filePaths)
-                uploadedFilePaths.Add(UploadFile(filePath));
-            return (uploadedFilePaths.Count > 0) ? uploadedFilePaths.ToArray() : null; // 若至少有一个文件上传成功，返回其在服务上保存的路径；否则返回空
+            var uploadedFilePaths = filePaths.Select(filePath => UploadFile(filePath));
+            return uploadedFilePaths.Any() ? uploadedFilePaths.ToArray() : null; // 若至少有一个文件上传成功，返回其在服务上保存的路径；否则返回空
         }
 
         public string UploadFile(string filePath)
@@ -57,7 +54,9 @@ namespace WinFormsApp
         public string[] UploadFolder(string folderPath, bool recurFlag)
         {
             if (!Directory.Exists(folderPath)) // 目录不存在
+            {
                 throw new DirectoryNotFoundException("未找到该目录");
+            }
 
             var theFolder = new DirectoryInfo(folderPath); // 定位到选取的文件夹
 
@@ -74,12 +73,11 @@ namespace WinFormsApp
             }
 
             if (theFiles.Count <= 0) // 该目录为空
+            {
                 throw new IOException("目录为空");
+            }
 
-            var filePaths = new List<string>(theFiles.Count); // 创建文件路径列表
-            foreach (var file in theFiles)
-                filePaths.Add(file.FullName); // 将该目录下的所有文件添加到文件路径列表
-            return UploadFiles(filePaths.ToArray()); // 将该目录下的所有文件上传
+            return UploadFiles(theFiles.Select(file => file.FullName).ToArray()); // 将该目录下的所有文件上传
         }
 
         // 获取文件夹下的文件
@@ -107,10 +105,8 @@ namespace WinFormsApp
         /* 转换指定路径的文件，并返回转换后的文件保存在服务上的路径 */
         public string[] TranscodeFiles(string[] filePaths, bool bomFlag, bool overrideFlag)
         {
-            var convertedFilePaths = new List<string>(filePaths.Length);
-            foreach (var filePath in filePaths)
-                convertedFilePaths.Add(TranscodeFile(filePath, bomFlag, overrideFlag));
-            return (convertedFilePaths.Count > 0) ? convertedFilePaths.ToArray() : null; // 若至少有一个文件转换成功，返回转换后的文件保存在服务上的路径；否则返回空
+            var convertedFilePaths = filePaths.Select(filePath => TranscodeFile(filePath, bomFlag, overrideFlag));
+            return convertedFilePaths.Any() ? convertedFilePaths.ToArray() : null; // 若至少有一个文件转换成功，返回转换后的文件保存在服务上的路径；否则返回空
         }
 
         public string TranscodeFile(string filePath, bool bomFlag, bool overrideFlag)
@@ -154,13 +150,17 @@ namespace WinFormsApp
         public void DownLoadFiles(string[] filePaths, string downloadPath)
         {
             foreach (var originalFilePath in filePaths)
+            {
                 DownLoadFile(originalFilePath, downloadPath);
+            }
         }
 
         public void DownLoadFile(string filePath, string downloadPath)
         {
             if (!Directory.Exists(downloadPath))
+            {
                 throw new DirectoryNotFoundException("未找到该目录");
+            }
 
             try
             {
@@ -187,7 +187,9 @@ namespace WinFormsApp
         {
             var filesDir = new DirectoryInfo("Files/"); // 指定缓存文件夹的路径
             if (Directory.Exists(filesDir.FullName)) // 若该缓存文件夹存在（未被意外删除）
+            {
                 filesDir.Delete(true); // 删除缓存文件夹（包含子目录和文件）
+            }
         }
     }
 }

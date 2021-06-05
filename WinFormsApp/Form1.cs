@@ -34,8 +34,12 @@ namespace WinFormsApp
 
             // 下面在文本框中显示选取的若干文件的文件名
             if (count == 1) // 若只有一个文件
+            {
                 textBox_file.Text = files[0]; // 直接显示文件名
+            }
+
             else // 若不止一个文件
+            {
                 for (var i = 0; i < count; i++)
                 {
                     textBox_file.Text += "\"" + files[i] + "\""; // 在文件名两边加上半角引号
@@ -43,6 +47,7 @@ namespace WinFormsApp
                         continue;
                     textBox_file.Text += " "; // 使用空格分隔各文件名
                 }
+            }
 
             ShowDirectory(null); // 转换文件和转换文件夹不可同时选择
         }
@@ -118,7 +123,9 @@ namespace WinFormsApp
             Output = (folderDialog.ShowDialog() == DialogResult.OK) ? folderDialog.SelectedPath : null;
             ShowOutput(Output);
             if (OriginalOutput != Output) // 更改了输出文件夹
+            {
                 checkBox_sameOutput.Checked = false;
+            }
         }
 
         private void button_convert_Click(object sender, EventArgs e)
@@ -126,15 +133,23 @@ namespace WinFormsApp
             try
             {
                 if (Files != null) // 已选取转换文件
+                {
                     service.DownLoadFiles(service.TranscodeFiles(service.UploadFiles(Files), checkBox_BOM.Checked, checkBox_override.Checked), Output);
+                }
                 else if (Directory != null) // 已选取转换文件夹
+                {
                     service.DownLoadFiles(service.TranscodeFiles(service.UploadFolder(Directory, checkBox_recur.Checked), checkBox_BOM.Checked, checkBox_override.Checked), Output);
+                }
                 else // 二者均未选择
+                {
                     throw new ArgumentNullException("转换文件和转换文件夹均未选择");
+                }
 
                 MessageBox.Show("转换成功！");
                 if (checkBox_openOutput.Checked && Output != null)
+                {
                     Process.Start("Explorer.exe", Output);
+                }
             }
             catch (Exception ex)
             {
@@ -145,20 +160,26 @@ namespace WinFormsApp
         private void button_openDirectory_Click(object sender, EventArgs e)
         {
             if (Directory != null)
+            {
                 Process.Start("Explorer.exe", Directory);
+            }
         }
 
         private void button_openOutput_Click(object sender, EventArgs e)
         {
             if (Output != null)
+            {
                 Process.Start("Explorer.exe", Output);
+            }
         }
 
         // TODO: 修复此复选框和输出文件夹在多种情况下可能存在的显示错误的问题
         private void checkBox_sameOutput_CheckedChanged(object sender, EventArgs e)
         {
             if (!checkBox_sameOutput.Checked) // 取消勾选
+            {
                 checkBox_override.Checked = false;
+            }
 
             if (Files != null || Directory != null)
             {
@@ -181,7 +202,9 @@ namespace WinFormsApp
         private void checkBox_override_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox_override.Checked)
+            {
                 checkBox_sameOutput.Checked = true;
+            }
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)

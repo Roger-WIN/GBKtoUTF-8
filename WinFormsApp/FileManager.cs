@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace WinFormsApp
 {
-    public class FileManager
+    public static class FileManager
     {
         /* 将文件读取为字节流 */
         public static byte[] FileToByteStream(string filePath)
