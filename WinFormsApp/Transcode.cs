@@ -9,12 +9,6 @@ namespace WinFormsApp
         // TODO: 修复文件无法转换为 UTF-8 with BOM 编码的问题
         public static byte[] TranscodeByteStream(byte[] bytes, bool hasBom)
         {
-            // 产生该字节流的文件不是文本文件
-            if (!FileManager.IsTextFile(bytes))
-            {
-                throw new FormatException("此文件不是文本文件，不可转换。");
-            }
-
             // GBK 编码
             var gbk = Encoding.GetEncoding(936);
             // UTF-8 编码

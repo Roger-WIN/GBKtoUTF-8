@@ -126,6 +126,12 @@ namespace WinFormsApp
         {
             try
             {
+                // 该文件不是文本文件
+                if (!FileManager.IsTextFile(filePath))
+                {
+                    return null;
+                }
+
                 // 获取原文件的文件名（包含扩展名）
                 var fileName = Path.GetFileName(filePath);
                 // 将文件读取为字节流
@@ -166,11 +172,6 @@ namespace WinFormsApp
             catch (FileNotFoundException)
             {
                 throw new FileNotFoundException("未找到文件");
-            }
-            // 该文件不是文本文件
-            catch (FormatException)
-            {
-                throw new FormatException("文件「" + Path.GetFileName(filePath) + "」不是文本文件，不可转换");
             }
         }
 
