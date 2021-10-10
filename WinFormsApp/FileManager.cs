@@ -26,12 +26,10 @@ namespace WinFormsApp
         {
             // 以写权限打开或新建文件
             using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write))
+            using (var streamWriter = new StreamWriter(fileStream, new UTF8Encoding(hasBom)))
             {
-                using (var streamWriter = new StreamWriter(fileStream, new UTF8Encoding(hasBom)))
-                {
-                    // 将字符流写入文件
-                    streamWriter.Write(Transcode.UTF8.GetString(fileBytes));
-                }
+                // 将字符串写入文件
+                streamWriter.Write(Transcode.UTF8.GetString(fileBytes));
             }
         }
 
