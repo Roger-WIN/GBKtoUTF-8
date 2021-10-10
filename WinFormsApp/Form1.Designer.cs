@@ -231,7 +231,7 @@
             this.button_convert.BackColor = System.Drawing.SystemColors.MenuHighlight;
             this.button_convert.Font = new System.Drawing.Font("微软雅黑", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.button_convert.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.button_convert.Location = new System.Drawing.Point(977, 3);
+            this.button_convert.Location = new System.Drawing.Point(997, 3);
             this.button_convert.Name = "button_convert";
             this.button_convert.Size = new System.Drawing.Size(83, 52);
             this.button_convert.TabIndex = 0;
@@ -244,11 +244,11 @@
             this.checkBox_BOM.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.checkBox_BOM.AutoSize = true;
             this.checkBox_BOM.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.checkBox_BOM.Location = new System.Drawing.Point(174, 12);
+            this.checkBox_BOM.Location = new System.Drawing.Point(3, 12);
             this.checkBox_BOM.Name = "checkBox_BOM";
             this.checkBox_BOM.Size = new System.Drawing.Size(134, 34);
             this.checkBox_BOM.TabIndex = 2;
-            this.checkBox_BOM.Text = "包含 BOM";
+            this.checkBox_BOM.Text = "提供 BOM";
             this.checkBox_BOM.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel2
@@ -265,11 +265,11 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.Controls.Add(this.checkBox_override, 2, 0);
-            this.tableLayoutPanel2.Controls.Add(this.checkBox_BOM, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.button_convert, 5, 0);
             this.tableLayoutPanel2.Controls.Add(this.checkBox_sameOutput, 3, 0);
             this.tableLayoutPanel2.Controls.Add(this.checkBox_openOutput, 4, 0);
-            this.tableLayoutPanel2.Controls.Add(this.checkBox_recur, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.checkBox_recur, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.checkBox_BOM, 0, 0);
             this.tableLayoutPanel2.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tableLayoutPanel2.Location = new System.Drawing.Point(21, 345);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -321,7 +321,7 @@
             this.checkBox_recur.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.checkBox_recur.AutoSize = true;
             this.checkBox_recur.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.checkBox_recur.Location = new System.Drawing.Point(3, 12);
+            this.checkBox_recur.Location = new System.Drawing.Point(143, 12);
             this.checkBox_recur.Name = "checkBox_recur";
             this.checkBox_recur.Size = new System.Drawing.Size(165, 34);
             this.checkBox_recur.TabIndex = 1;

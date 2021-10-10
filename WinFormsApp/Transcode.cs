@@ -1,20 +1,19 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace WinFormsApp
 {
     public static class Transcode
     {
+        // UTF-8 编码
+        public static readonly Encoding UTF8 = new UTF8Encoding();
+
         // TODO: 检查源字节流的编码，解决其不是 GBK 编码的异常情况
-        // TODO: 修复文件无法转换为 UTF-8 with BOM 编码的问题
-        public static byte[] TranscodeByteStream(byte[] bytes, bool hasBom)
+        public static byte[] TranscodeByteStream(byte[] bytes)
         {
             // GBK 编码
             var gbk = Encoding.GetEncoding(936);
-            // UTF-8 编码
-            var utf8 = new UTF8Encoding(hasBom);
             // 将字节流从 GBK 转码为 UTF-8
-            return Encoding.Convert(gbk, utf8, bytes);
+            return Encoding.Convert(gbk, UTF8, bytes);
         }
     }
 }

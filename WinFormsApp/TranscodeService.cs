@@ -137,7 +137,7 @@ namespace WinFormsApp
                 // 将文件读取为字节流
                 var originalFileBytes = FileManager.FileToByteStream(filePath);
                 // 转换字节流
-                var targetFileBytes = Transcode.TranscodeByteStream(originalFileBytes, hasBom);
+                var targetFileBytes = Transcode.TranscodeByteStream(originalFileBytes);
                 // 不覆盖原文件
                 if (!isOverriden)
                 {
@@ -155,7 +155,7 @@ namespace WinFormsApp
                 // 指定转换后的文件在服务中保存的路径
                 var convertedFilePath = Path.Combine(pathToConvertedFiles, fileName);
                 // 在服务的指定路径创建目标文件
-                FileManager.ByteStreamToFile(convertedFilePath, targetFileBytes);
+                FileManager.ByteStreamToFile(convertedFilePath, targetFileBytes, hasBom);
                 return convertedFilePath;
             }
             // 文件路径为空

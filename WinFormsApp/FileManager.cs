@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace WinFormsApp
 {
@@ -21,13 +22,16 @@ namespace WinFormsApp
         }
 
         /* 利用字节流创建或写入新文件 */
-        public static void ByteStreamToFile(string filePath, byte[] fileBytes)
+        public static void ByteStreamToFile(string filePath, byte[] fileBytes, bool hasBom)
         {
             // 以写权限打开或新建文件
             using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write))
             {
-                // 将字节流写入文件
-                fileStream.Write(fileBytes, 0, fileBytes.Length);
+                using (var streamWriter = new StreamWriter(fileStream, new UTF8Encoding(hasBom)))
+                {
+                    // 将字符流写入文件
+                    streamWriter.Write(Transcode.UTF8.GetString(fileBytes));
+                }
             }
         }
 
