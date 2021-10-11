@@ -2,13 +2,13 @@
 
 namespace WinFormsApp
 {
-    public static class Transcode
+    public class Transcode
     {
         // UTF-8 编码
         public static readonly Encoding UTF8 = new UTF8Encoding();
 
         // TODO: 检查源字节流的编码，解决其不是 GBK 编码的异常情况
-        public static byte[] TranscodeByteStream(byte[] bytes)
+        public byte[] TranscodeByteStream(byte[] bytes)
         {
             // GBK 编码
             var gbk = Encoding.GetEncoding(936);
