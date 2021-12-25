@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 
 namespace WinFormsApp
 {
@@ -11,26 +8,22 @@ namespace WinFormsApp
         public static byte[] FileToByteStream(string filePath)
         {
             // 以读权限打开文件
-            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-            {
-                // 利用文件流的长度创建新的字节数组
-                var fileBytes = new byte[fileStream.Length];
-                // 从文件流中读取字节块并写入字节流
-                fileStream.Read(fileBytes, 0, fileBytes.Length);
-                return fileBytes;
-            }
+            using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            // 利用文件流的长度创建新的字节数组
+            var fileBytes = new byte[fileStream.Length];
+            // 从文件流中读取字节块并写入字节流
+            fileStream.Read(fileBytes, 0, fileBytes.Length);
+            return fileBytes;
         }
 
         /* 利用字节流创建或写入新文件 */
         public static void ByteStreamToFile(string filePath, byte[] fileBytes, bool hasBom)
         {
             // 以写权限打开或新建文件
-            using (var fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write))
-            using (var streamWriter = new StreamWriter(fileStream, new UTF8Encoding(hasBom)))
-            {
-                // 将字符串写入文件
-                streamWriter.Write(Transcode.UTF8.GetString(fileBytes));
-            }
+            using var fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write);
+            using var streamWriter = new StreamWriter(fileStream, new UTF8Encoding(hasBom));
+            // 将字符串写入文件
+            streamWriter.Write(Transcode.UTF8.GetString(fileBytes));
         }
 
         /* 判断该文件是否是文本文件 */
