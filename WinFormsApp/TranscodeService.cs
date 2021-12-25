@@ -2,18 +2,24 @@
 {
     public class TranscodeService
     {
-        private readonly string pathToUploadedFiles;
-        private readonly string pathToConvertedFiles;
+        /**
+         * 上传的文件在服务中保存的目录
+         */
+        private const string DIR_FOR_UPLOADED_FILES = "Files/Uploaded/";
+
+        /**
+         * 转换后的文件在服务中保存的目录
+         */
+        private const string DIR_FOR_CONVERTED_FILES = "Files/Converted/";
+
+        private readonly FileManager fileManager = new FileManager();
+
+        private readonly Transcode transcode = new Transcode();
 
         public TranscodeService()
         {
-            // 指定上传的文件在服务中保存的目录
-            pathToUploadedFiles = "Files/Uploaded/";
-            // 指定转换后的文件在服务中保存的目录
-            pathToConvertedFiles = "Files/Converted/";
-
-            Directory.CreateDirectory(pathToUploadedFiles);
-            Directory.CreateDirectory(pathToConvertedFiles);
+            Directory.CreateDirectory(DIR_FOR_UPLOADED_FILES);
+            Directory.CreateDirectory(DIR_FOR_CONVERTED_FILES);
         }
 
         /* 上传文件，返回这些文件在服务上保存的路径 */
@@ -24,14 +30,14 @@
             return uploadedFilePaths.Any() ? uploadedFilePaths.ToArray() : null;
         }
 
-        public string UploadFile(string filePath)
+        private string UploadFile(string filePath)
         {
             try
             {
                 // 获取文件名
                 var fileName = Path.GetFileName(filePath);
                 // 指定上传的文件在服务中保存的路径
-                var uploadedFilePath = Path.Combine(pathToUploadedFiles, fileName);
+                var uploadedFilePath = Path.Combine(DIR_FOR_UPLOADED_FILES, fileName);
                 // 在服务的指定路径创建相同的文件
                 File.Copy(filePath, uploadedFilePath, true);
                 return uploadedFilePath;
@@ -63,46 +69,46 @@
             }
 
             // 定位到选取的文件夹
-            var theFolder = new DirectoryInfo(folderPath);
+            var folder = new DirectoryInfo(folderPath);
 
-            List<FileInfo> theFiles;
+            List<FileInfo> files;
             // 递归查找文件夹
             if (isRecursive)
             {
-                theFiles = new List<FileInfo>();
-                FetchFolderFiles(theFolder, theFiles);
+                files = new List<FileInfo>();
+                FetchFolderFiles(folder, files);
             }
             else
             {
-                theFiles = FetchFolderFiles(theFolder);
+                files = FetchFolderFiles(folder);
             }
 
             // 该目录为空
-            if (theFiles.Count <= 0)
+            if (!files.Any())
             {
                 throw new IOException("目录为空");
             }
 
             // 将该目录下的所有文件上传
-            return UploadFiles(theFiles.Select(file => file.FullName));
+            return UploadFiles(files.Select(file => file.FullName));
         }
 
         // 获取文件夹下的文件
-        private List<FileInfo> FetchFolderFiles(DirectoryInfo rootDir) => new List<FileInfo>(rootDir.GetFiles());
+        private List<FileInfo> FetchFolderFiles(DirectoryInfo dir) => new List<FileInfo>(dir.GetFiles());
 
         // 获取文件夹（及其子文件夹）下的文件
-        private void FetchFolderFiles(DirectoryInfo rootDir, List<FileInfo> fileList)
+        private void FetchFolderFiles(DirectoryInfo dir, List<FileInfo> fileList)
         {
             // 获取子文件，并添加到集合中
-            var files = rootDir.GetFiles();
-            if (files != null && files.Length > 0)
+            var files = dir.GetFiles();
+            if (files.Any())
             {
                 fileList.AddRange(files);
             }
 
             // 获取子文件夹
-            var subDirs = rootDir.GetDirectories();
-            if (subDirs != null && subDirs.Length > 0)
+            var subDirs = dir.GetDirectories();
+            if (subDirs.Any())
             {
                 // 对每个子文件夹递归执行当前方法
                 Array.ForEach(subDirs, subDir => FetchFolderFiles(subDir, fileList));
@@ -122,12 +128,12 @@
             return convertedFilePaths.Any() ? convertedFilePaths.ToArray() : null;
         }
 
-        public string? TranscodeFile(string filePath, bool hasBom, bool isOverriden)
+        private string? TranscodeFile(string filePath, bool hasBom, bool isOverriden)
         {
             try
             {
                 // 该文件不是文本文件
-                if (!FileManager.IsTextFile(filePath))
+                if (!fileManager.IsTextFile(filePath))
                 {
                     return null;
                 }
@@ -135,9 +141,9 @@
                 // 获取原文件的文件名（包含扩展名）
                 var fileName = Path.GetFileName(filePath);
                 // 将文件读取为字节流
-                var originalFileBytes = FileManager.FileToByteStream(filePath);
+                var originalFileBytes = fileManager.FileToByteStream(filePath);
                 // 转换字节流
-                var targetFileBytes = Transcode.TranscodeByteStream(originalFileBytes);
+                var targetFileBytes = transcode.TranscodeByteStream(originalFileBytes);
                 // 不覆盖原文件
                 if (!isOverriden)
                 {
@@ -153,9 +159,9 @@
                     fileName += extension;
                 }
                 // 指定转换后的文件在服务中保存的路径
-                var convertedFilePath = Path.Combine(pathToConvertedFiles, fileName);
+                var convertedFilePath = Path.Combine(DIR_FOR_CONVERTED_FILES, fileName);
                 // 在服务的指定路径创建目标文件
-                FileManager.ByteStreamToFile(convertedFilePath, targetFileBytes, hasBom);
+                fileManager.ByteStreamToFile(convertedFilePath, targetFileBytes, hasBom);
                 return convertedFilePath;
             }
             // 文件路径为空
@@ -180,14 +186,11 @@
         {
             if (filePaths != null)
             {
-                foreach (var originalFilePath in filePaths)
-                {
-                    DownLoadFile(originalFilePath, downloadPath);
-                }
+                Array.ForEach(filePaths.ToArray(), originalFilePath => DownLoadFile(originalFilePath, downloadPath));
             }
         }
 
-        public void DownLoadFile(string filePath, string? downloadPath)
+        private void DownLoadFile(string filePath, string? downloadPath)
         {
             if (!Directory.Exists(downloadPath))
             {
@@ -218,15 +221,15 @@
         }
 
         /* 清除缓存文件 */
-        public void ClearFiles()
+        public void ClearTempFiles()
         {
             // 指定缓存文件夹的路径
-            var filesDir = new DirectoryInfo("Files/");
+            var tempDir = new DirectoryInfo("Files/");
             // 若该缓存文件夹存在（未被意外删除）
-            if (filesDir.Exists)
+            if (tempDir.Exists)
             {
                 // 删除缓存文件夹（包含子目录和文件）
-                filesDir.Delete(true);
+                tempDir.Delete(true);
             }
         }
 

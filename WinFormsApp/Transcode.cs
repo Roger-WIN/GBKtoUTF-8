@@ -1,38 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Text;
 
 namespace WinFormsApp
 {
-    public static class Transcode
+    public class Transcode
     {
         // UTF-8 编码
         public static readonly Encoding UTF8 = new UTF8Encoding();
 
-        public static byte[] TranscodeByteStream(byte[] bytes)
+        public byte[] TranscodeByteStream(byte[] bytes)
         {
             // 检测字符编码
-            var encoding = detectEncoding(bytes);
+            var encoding = DetectEncoding(bytes);
             // 将字节流从其它字符编码转码为 UTF-8
             return Encoding.Convert(encoding, UTF8, RemoveBom(bytes));
         }
 
-        /* 检测文件的字符编码 */
-        private static Encoding detectEncoding(byte[] bytes)
+        /* TODO: 检测文件的字符编码 */
+        private Encoding DetectEncoding(byte[] bytes)
         {
             return Encoding.GetEncoding(936);
         }
 
         /* 移除 BOM */
-        private static byte[] RemoveBom(byte[] bytes)
+        private byte[] RemoveBom(byte[] bytes)
         {
-            var bom = matchBom(bytes);
+            var bom = MatchBom(bytes);
             return bom != null ? bytes.Skip(bom.Length).ToArray() : bytes;
         }
 
         /* 寻找匹配的 BOM */
-        private static byte[] matchBom(byte[] bytes)
+        private byte[]? MatchBom(byte[] bytes)
         {
             // BOM for UTF-8
             var utf8 = new byte[] { 0xEF, 0xBB, 0xBF };

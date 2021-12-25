@@ -2,10 +2,10 @@
 
 namespace WinFormsApp
 {
-    public static class FileManager
+    public class FileManager
     {
         /* 将文件读取为字节流 */
-        public static byte[] FileToByteStream(string filePath)
+        public byte[] FileToByteStream(string filePath)
         {
             // 以读权限打开文件
             using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
@@ -17,19 +17,19 @@ namespace WinFormsApp
         }
 
         /* 利用字节流创建或写入新文件 */
-        public static void ByteStreamToFile(string filePath, byte[] fileBytes, bool hasBom)
+        public void ByteStreamToFile(string filePath, byte[] fileBytes, bool hasBom)
         {
-            // 以写权限打开或新建文件
-            using var fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write);
+            // 以写权限新建文件
+            using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
             using var streamWriter = new StreamWriter(fileStream, new UTF8Encoding(hasBom));
             // 将字符串写入文件
             streamWriter.Write(Transcode.UTF8.GetString(fileBytes));
         }
 
         /* 判断该文件是否是文本文件 */
-        public static bool IsTextFile(string filePath) => IsTextFile(FileToByteStream(filePath));
+        public bool IsTextFile(string filePath) => IsTextFile(FileToByteStream(filePath));
 
         /* 判断产生该字节流的文件是否是文本文件 */
-        public static bool IsTextFile(IEnumerable<byte> fileBytes) => !fileBytes.ToList().Contains(0); // 若存在字节 0，则不是文本文件
+        public bool IsTextFile(IEnumerable<byte> fileBytes) => !fileBytes.ToList().Contains(0); // 若存在字节 0，则不是文本文件
     }
 }
