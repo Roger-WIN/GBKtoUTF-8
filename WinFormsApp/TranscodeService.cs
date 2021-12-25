@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-namespace WinFormsApp
+﻿namespace WinFormsApp
 {
     public class TranscodeService
     {
@@ -22,7 +17,7 @@ namespace WinFormsApp
         }
 
         /* 上传文件，返回这些文件在服务上保存的路径 */
-        public string[] UploadFiles(IEnumerable<string> filePaths)
+        public string[]? UploadFiles(IEnumerable<string> filePaths)
         {
             var uploadedFilePaths = TrimNull(filePaths.Select(filePath => UploadFile(filePath)));
             // 若至少有一个文件上传成功，返回其在服务上保存的路径；否则返回空
@@ -59,7 +54,7 @@ namespace WinFormsApp
         }
 
         /* 上传文件夹，返回其中的文件在服务上保存的路径。若为空目录，返回空 */
-        public string[] UploadFolder(string folderPath, bool isRecursive)
+        public string[]? UploadFolder(string folderPath, bool isRecursive)
         {
             // 目录不存在
             if (!Directory.Exists(folderPath))
@@ -115,14 +110,19 @@ namespace WinFormsApp
         }
 
         /* 转换指定路径的文件，并返回转换后的文件保存在服务上的路径 */
-        public string[] TranscodeFiles(IEnumerable<string> filePaths, bool hasBom, bool isOverriden)
+        public string[]? TranscodeFiles(IEnumerable<string>? filePaths, bool hasBom, bool isOverriden)
         {
+            if (filePaths == null)
+            {
+                return null;
+            }
+
             var convertedFilePaths = TrimNull(filePaths.Select(filePath => TranscodeFile(filePath, hasBom, isOverriden)));
             // 若至少有一个文件转换成功，返回转换后的文件保存在服务上的路径；否则返回空
             return convertedFilePaths.Any() ? convertedFilePaths.ToArray() : null;
         }
 
-        public string TranscodeFile(string filePath, bool hasBom, bool isOverriden)
+        public string? TranscodeFile(string filePath, bool hasBom, bool isOverriden)
         {
             try
             {
@@ -176,15 +176,18 @@ namespace WinFormsApp
         }
 
         /* 从服务上的指定路径下载文件 */
-        public void DownLoadFiles(IEnumerable<string> filePaths, string downloadPath)
+        public void DownLoadFiles(IEnumerable<string>? filePaths, string? downloadPath)
         {
-            foreach (var originalFilePath in filePaths)
+            if (filePaths != null)
             {
-                DownLoadFile(originalFilePath, downloadPath);
+                foreach (var originalFilePath in filePaths)
+                {
+                    DownLoadFile(originalFilePath, downloadPath);
+                }
             }
         }
 
-        public void DownLoadFile(string filePath, string downloadPath)
+        public void DownLoadFile(string filePath, string? downloadPath)
         {
             if (!Directory.Exists(downloadPath))
             {
