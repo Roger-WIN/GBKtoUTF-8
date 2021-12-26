@@ -123,7 +123,6 @@
             // textBox_file
             // 
             this.textBox_file.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_file.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.textBox_file.Font = new System.Drawing.Font("Microsoft YaHei UI", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBox_file.Location = new System.Drawing.Point(165, 31);
             this.textBox_file.Name = "textBox_file";
@@ -134,7 +133,6 @@
             // textBox_directory
             // 
             this.textBox_directory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_directory.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.textBox_directory.Font = new System.Drawing.Font("Microsoft YaHei UI", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBox_directory.Location = new System.Drawing.Point(165, 129);
             this.textBox_directory.Name = "textBox_directory";
@@ -145,7 +143,6 @@
             // textBox_output
             // 
             this.textBox_output.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_output.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.textBox_output.Font = new System.Drawing.Font("Microsoft YaHei UI", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBox_output.Location = new System.Drawing.Point(165, 228);
             this.textBox_output.Name = "textBox_output";
@@ -301,14 +298,13 @@
             this.button_convert.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.button_convert.AutoSize = true;
             this.button_convert.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.button_convert.Font = new System.Drawing.Font("Microsoft YaHei UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button_convert.Font = new System.Drawing.Font("Microsoft YaHei UI", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button_convert.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
             this.button_convert.Location = new System.Drawing.Point(956, 3);
             this.button_convert.Name = "button_convert";
             this.button_convert.Size = new System.Drawing.Size(124, 48);
             this.button_convert.TabIndex = 18;
             this.button_convert.Text = "转换";
-            this.button_convert.UseVisualStyleBackColor = false;
             this.button_convert.Click += new System.EventHandler(this.button_convert_Click);
             // 
             // Form1

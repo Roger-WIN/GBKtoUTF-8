@@ -14,7 +14,6 @@
     <AssemblyName>GBK.to.UTF-8</AssemblyName>
     <RepositoryUrl>https://github.com/Roger-WIN/GBKtoUTF-8</RepositoryUrl>
     <PackageProjectUrl>https://github.com/Roger-WIN/GBKtoUTF-8</PackageProjectUrl>
-    <Version>1.5.0.0</Version>
     <Authors>Roger-WIN</Authors>
     <Product>GBK 转 UTF-8</Product>
     <Copyright>Copyright © 2021</Copyright>
