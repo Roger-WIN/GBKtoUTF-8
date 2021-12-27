@@ -12,8 +12,8 @@ https://github.com/Roger-WIN/GBKtoUTF-8/releases
 
 提供两种可执行文件：
 
-- `GBK.to.UTF-8_with-runtime.exe`：已包含框架（.NET 桌面运行时），无需另外安装，可直接运行；
-- `GBK.to.UTF-8.exe`：未包含框架，需自行安装，方可运行。
+- `GBK.to.UTF-8_with-runtime.exe`：已内置框架（.NET 桌面运行时），无需另外安装，可直接运行；
+- `GBK.to.UTF-8.exe`：未内置框架，需自行安装，方可运行。
 
 ## 系统要求
 
@@ -26,10 +26,8 @@ https://github.com/Roger-WIN/GBKtoUTF-8/releases
 
 - [.NET 6 桌面运行时](https://dotnet.microsoft.com/zh-cn/download/dotnet/thank-you/runtime-desktop-6.0.1-windows-x64-installer)
 
-## 开发
+## 开发等
 
-### 先决条件
+- [开发先决条件](https://github.com/Roger-WIN/GBKtoUTF-8/wiki/开发先决条件)
 
-- [Windows 10](https://www.microsoft.com/zh-cn/software-download/windows10)（1909 或更高版本），[Windows 11](https://www.microsoft.com/zh-cn/software-download/windows11)
-- [Microsoft Visual Studio 2022](https://visualstudio.microsoft.com/zh-hans/vs/)
-- [.NET 6 SDK](https://dotnet.microsoft.com/zh-cn/download/dotnet/thank-you/sdk-6.0.101-windows-x64-installer)
+- [发布](https://github.com/Roger-WIN/GBKtoUTF-8/wiki/发布概述)
