@@ -19,9 +19,11 @@
     <Copyright>Copyright © 2021</Copyright>
     <Description>GBK 转 UTF-8</Description>
     <NeutralLanguage>zh-CN</NeutralLanguage>
+    <CodeAnalysisRuleSet>..\.sonarlint\roger-win_gbktoutf-8csharp.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>
+    <AdditionalFiles Include="..\.sonarlint\roger-win_gbktoutf-8\CSharp\SonarLint.xml" Link="SonarLint.xml" />
     <Content Include="GBKtoUTF-8.ico" />
   </ItemGroup>
 </Project>

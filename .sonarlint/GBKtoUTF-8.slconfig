@@ -1,0 +1,15 @@
+{
+  "ServerUri": "https://sonarcloud.io/",
+  "Organization": {
+    "Key": "rogerkung-win",
+    "Name": "Roger Kung .WIN"
+  },
+  "ProjectKey": "Roger-WIN_GBKtoUTF-8",
+  "ProjectName": "GBKtoUTF-8",
+  "Profiles": {
+    "CSharp": {
+      "ProfileKey": "AXi3uQPBEp0-jvk7kZAM",
+      "ProfileTimestamp": "2022-03-31T10:15:41Z"
+    }
+  }
+}
