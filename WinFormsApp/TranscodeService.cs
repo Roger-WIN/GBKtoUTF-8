@@ -23,24 +23,71 @@
         }
 
         /* 上传文件，返回这些文件在服务上保存的路径 */
-        public string[]? UploadFiles(IEnumerable<string> filePaths)
+        public Dictionary<string, string>? UploadFiles(Dictionary<string, string> files)
         {
-            var uploadedFilePaths = TrimNull(filePaths.Select(filePath => UploadFile(filePath)));
+            var uploadedFiles = new Dictionary<string, string>();
+            foreach (var file in files)
+            {
+                var uploadedFile = UploadFile(file);
+                uploadedFiles.TryAdd(uploadedFile, file.Value);
+            }
             // 若至少有一个文件上传成功，返回其在服务上保存的路径；否则返回空
-            return uploadedFilePaths.Any() ? uploadedFilePaths.ToArray() : null;
+            return uploadedFiles.Any() ? uploadedFiles : null;
         }
 
-        private string UploadFile(string filePath)
+        private string UploadFile(KeyValuePair<string, string> file)
         {
             try
             {
                 // 获取文件名
-                var fileName = Path.GetFileName(filePath);
+                var fileName = Path.GetFileName(file.Key);
+                // 获取目录层次
+                var dirLevel = file.Value;
                 // 指定上传的文件在服务中保存的路径
-                var uploadedFilePath = Path.Combine(DIR_FOR_UPLOADED_FILES, fileName);
+                var uploadedDir = Path.Combine(DIR_FOR_UPLOADED_FILES, dirLevel);
+                var uploadedFile = Path.Combine(uploadedDir, fileName);
+                // 在服务中创建指定的上传文件夹
+                Directory.CreateDirectory(uploadedDir);
                 // 在服务的指定路径创建相同的文件
-                File.Copy(filePath, uploadedFilePath, true);
-                return uploadedFilePath;
+                File.Copy(file.Key, uploadedFile, true);
+                return uploadedFile;
+            }
+            // 未选取文件
+            catch (ArgumentNullException)
+            {
+                throw new ArgumentNullException("未选取文件");
+            }
+            // 选取无效
+            catch (ArgumentException)
+            {
+                throw new ArgumentException("选取无效");
+            }
+            // 未找到该文件
+            catch (FileNotFoundException)
+            {
+                throw new FileNotFoundException("未找到文件");
+            }
+        }
+
+        /* 上传文件，返回这些文件在服务上保存的路径 */
+        public string[]? UploadFiles(IEnumerable<string> files)
+        {
+            var uploadedFiles = TrimNull(files.Select(file => UploadFile(file)));
+            // 若至少有一个文件上传成功，返回其在服务上保存的路径；否则返回空
+            return uploadedFiles.Any() ? uploadedFiles.ToArray() : null;
+        }
+
+        private string UploadFile(string file)
+        {
+            try
+            {
+                // 获取文件名
+                var fileName = Path.GetFileName(file);
+                // 指定上传的文件在服务中保存的路径
+                var uploadedFile = Path.Combine(DIR_FOR_UPLOADED_FILES, fileName);
+                // 在服务的指定路径创建相同的文件
+                File.Copy(file, uploadedFile, true);
+                return uploadedFile;
             }
             // 未选取文件
             catch (ArgumentNullException)
@@ -60,7 +107,7 @@
         }
 
         /* 上传文件夹，返回其中的文件在服务上保存的路径。若为空目录，返回空 */
-        public string[]? UploadFolder(string folderPath, bool isRecursive)
+        public Dictionary<string, string>? UploadFolder(string folderPath, bool isRecursive)
         {
             // 目录不存在
             if (!Directory.Exists(folderPath))
@@ -72,6 +119,7 @@
             var folder = new DirectoryInfo(folderPath);
 
             List<FileInfo> files;
+            Dictionary<string, string> fileDirs;
             // 递归查找文件夹
             if (isRecursive)
             {
@@ -83,14 +131,18 @@
                 files = FetchFolderFiles(folder);
             }
 
-            // 该目录为空
-            if (!files.Any())
+            // 该目录不为空
+            if (files.Any())
+            {
+                fileDirs = FetchFolderRelaDirs(folder, files);
+            }
+            else
             {
                 throw new IOException("目录为空");
             }
 
             // 将该目录下的所有文件上传
-            return UploadFiles(files.Select(file => file.FullName));
+            return UploadFiles(fileDirs);
         }
 
         // 获取文件夹下的文件
@@ -115,33 +167,41 @@
             }
         }
 
+        // 获取文件夹下的子文件夹
+        private Dictionary<string, string>? FetchFolderRelaDirs(DirectoryInfo root, IEnumerable<FileInfo> fileList) => fileList.ToDictionary(file => file.FullName, file => Path.GetRelativePath(root.FullName, file.Directory.FullName));
+
         /* 转换指定路径的文件，并返回转换后的文件保存在服务上的路径 */
-        public string[]? TranscodeFiles(IEnumerable<string>? filePaths, bool hasBom, bool isOverriden)
+        public Dictionary<string, string>? TranscodeFiles(Dictionary<string, string>? files, bool hasBom, bool isOverriden)
         {
-            if (filePaths == null)
+            if (files == null)
             {
                 return null;
             }
 
-            var convertedFilePaths = TrimNull(filePaths.Select(filePath => TranscodeFile(filePath, hasBom, isOverriden)));
-            // 若至少有一个文件转换成功，返回转换后的文件保存在服务上的路径；否则返回空
-            return convertedFilePaths.Any() ? convertedFilePaths.ToArray() : null;
+            var convertedFiles = new Dictionary<string, string>();
+            foreach (var file in files)
+            {
+                var convertedFile = TranscodeFile(file, hasBom, isOverriden);
+                convertedFiles.TryAdd(convertedFile, file.Value);
+            }
+            // 若至少有一个文件上传成功，返回其在服务上保存的路径；否则返回空
+            return convertedFiles.Any() ? convertedFiles : null;
         }
 
-        private string? TranscodeFile(string filePath, bool hasBom, bool isOverriden)
+        private string? TranscodeFile(KeyValuePair<string, string> file, bool hasBom, bool isOverriden)
         {
             try
             {
                 // 该文件不是文本文件
-                if (!fileManager.IsTextFile(filePath))
+                if (!fileManager.IsTextFile(file.Key))
                 {
                     return null;
                 }
 
                 // 获取原文件的文件名（包含扩展名）
-                var fileName = Path.GetFileName(filePath);
+                var fileName = Path.GetFileName(file.Key);
                 // 将文件读取为字节流
-                var originalFileBytes = fileManager.FileToByteStream(filePath);
+                var originalFileBytes = fileManager.FileToByteStream(file.Key);
                 // 转换字节流
                 var targetFileBytes = transcode.TranscodeByteStream(originalFileBytes);
                 // 不覆盖原文件
@@ -150,19 +210,90 @@
                     // 指定目标文件名中的后缀，与是否包含 BOM 有关
                     var suffix = " - [UTF-8" + (hasBom ? " with BOM" : string.Empty) + "]";
                     // 获取原文件的扩展名
-                    var extension = Path.GetExtension(filePath);
+                    var extension = Path.GetExtension(file.Key);
                     // 获取原文件的文件名（不包含扩展名）
-                    fileName = Path.GetFileNameWithoutExtension(filePath);
+                    fileName = Path.GetFileNameWithoutExtension(file.Key);
+                    // 向目标文件名中添加后缀
+                    fileName += suffix;
+                    // 向目标文件名补齐扩展名
+                    fileName += extension;
+                }
+                // 获取目录层次
+                var dirLevel = file.Value;
+                // 指定转换后的文件在服务中保存的路径
+                var convertedDir = Path.Combine(DIR_FOR_CONVERTED_FILES, dirLevel);
+                var convertedFile = Path.Combine(convertedDir, fileName);
+                // 在服务中创建指定的目标文件夹
+                Directory.CreateDirectory(convertedDir);
+                // 在服务的指定路径创建目标文件
+                fileManager.ByteStreamToFile(convertedFile, targetFileBytes, hasBom);
+                return convertedFile;
+            }
+            // 文件路径为空
+            catch (ArgumentNullException)
+            {
+                throw new ArgumentNullException("文件路径为空");
+            }
+            // 文件路径无效
+            catch (ArgumentException)
+            {
+                throw new ArgumentException("文件路径无效");
+            }
+            // 未找到文件
+            catch (FileNotFoundException)
+            {
+                throw new FileNotFoundException("未找到文件");
+            }
+        }
+
+        /* 转换指定路径的文件，并返回转换后的文件保存在服务上的路径 */
+        public string[]? TranscodeFiles(IEnumerable<string>? files, bool hasBom, bool isOverriden)
+        {
+            if (files == null)
+            {
+                return null;
+            }
+
+            var convertedFiles = TrimNull(files.Select(file => TranscodeFile(file, hasBom, isOverriden)));
+            // 若至少有一个文件转换成功，返回转换后的文件保存在服务上的路径；否则返回空
+            return convertedFiles.Any() ? convertedFiles.ToArray() : null;
+        }
+
+        private string? TranscodeFile(string file, bool hasBom, bool isOverriden)
+        {
+            try
+            {
+                // 该文件不是文本文件
+                if (!fileManager.IsTextFile(file))
+                {
+                    return null;
+                }
+
+                // 获取原文件的文件名（包含扩展名）
+                var fileName = Path.GetFileName(file);
+                // 将文件读取为字节流
+                var originalFileBytes = fileManager.FileToByteStream(file);
+                // 转换字节流
+                var targetFileBytes = transcode.TranscodeByteStream(originalFileBytes);
+                // 不覆盖原文件
+                if (!isOverriden)
+                {
+                    // 指定目标文件名中的后缀，与是否包含 BOM 有关
+                    var suffix = " - [UTF-8" + (hasBom ? " with BOM" : string.Empty) + "]";
+                    // 获取原文件的扩展名
+                    var extension = Path.GetExtension(file);
+                    // 获取原文件的文件名（不包含扩展名）
+                    fileName = Path.GetFileNameWithoutExtension(file);
                     // 向目标文件名中添加后缀
                     fileName += suffix;
                     // 向目标文件名补齐扩展名
                     fileName += extension;
                 }
                 // 指定转换后的文件在服务中保存的路径
-                var convertedFilePath = Path.Combine(DIR_FOR_CONVERTED_FILES, fileName);
+                var convertedFile = Path.Combine(DIR_FOR_CONVERTED_FILES, fileName);
                 // 在服务的指定路径创建目标文件
-                fileManager.ByteStreamToFile(convertedFilePath, targetFileBytes, hasBom);
-                return convertedFilePath;
+                fileManager.ByteStreamToFile(convertedFile, targetFileBytes, hasBom);
+                return convertedFile;
             }
             // 文件路径为空
             catch (ArgumentNullException)
@@ -182,15 +313,18 @@
         }
 
         /* 从服务上的指定路径下载文件 */
-        public void DownLoadFiles(IEnumerable<string>? filePaths, string? downloadPath)
+        public void DownLoadFiles(Dictionary<string, string>? files, string? downloadPath)
         {
-            if (filePaths != null)
+            if (files != null)
             {
-                Array.ForEach(filePaths.ToArray(), originalFilePath => DownLoadFile(originalFilePath, downloadPath));
+                foreach (var file in files)
+                {
+                    DownLoadFile(file, downloadPath);
+                }
             }
         }
 
-        private void DownLoadFile(string filePath, string? downloadPath)
+        private void DownLoadFile(KeyValuePair<string, string> file, string? downloadPath)
         {
             if (!Directory.Exists(downloadPath))
             {
@@ -199,9 +333,51 @@
 
             try
             {
-                var fileName = Path.GetFileName(filePath);
+                var fileName = Path.GetFileName(file.Key);
+                var dirLevel = file.Value;
+                var targetDir = Path.Combine(downloadPath, dirLevel);
+                var targetFile = Path.Combine(targetDir, fileName);
+                Directory.CreateDirectory(targetDir);
+                File.Copy(file.Key, targetFile, true);
+            }
+            // 文件路径为空
+            catch (ArgumentNullException)
+            {
+                throw new ArgumentNullException("文件路径为空");
+            }
+            // 文件路径无效
+            catch (ArgumentException)
+            {
+                throw new ArgumentException("文件路径无效");
+            }
+            // 未找到文件
+            catch (FileNotFoundException)
+            {
+                throw new FileNotFoundException("未找到文件");
+            }
+        }
+
+        /* 从服务上的指定路径下载文件 */
+        public void DownLoadFiles(IEnumerable<string>? files, string? downloadPath)
+        {
+            if (files != null)
+            {
+                Array.ForEach(files.ToArray(), file => DownLoadFile(file, downloadPath));
+            }
+        }
+
+        private void DownLoadFile(string file, string? downloadPath)
+        {
+            if (!Directory.Exists(downloadPath))
+            {
+                throw new DirectoryNotFoundException("未找到该目录");
+            }
+
+            try
+            {
+                var fileName = Path.GetFileName(file);
                 var targetFilePath = Path.Combine(downloadPath, fileName);
-                File.Copy(filePath, targetFilePath, true);
+                File.Copy(file, targetFilePath, true);
             }
             // 文件路径为空
             catch (ArgumentNullException)
