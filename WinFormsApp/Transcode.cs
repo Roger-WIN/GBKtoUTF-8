@@ -7,6 +7,11 @@ namespace WinFormsApp
         // UTF-8 编码
         public static readonly Encoding UTF8 = new UTF8Encoding();
 
+        public Transcode()
+        {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        }
+
         public byte[] TranscodeByteStream(byte[] bytes)
         {
             // 检测字符编码
