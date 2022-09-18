@@ -174,7 +174,7 @@
         private Dictionary<string, string>? FetchFolderRelaDirs(DirectoryInfo root, IEnumerable<FileInfo> fileList) => fileList.ToDictionary(file => file.FullName, file => Path.GetRelativePath(root.FullName, file.Directory.FullName));
 
         /* 转换指定路径的文件，并返回转换后的文件保存在服务上的路径 */
-        public Dictionary<string, string>? TranscodeFiles(Dictionary<string, string>? files, bool hasBom, bool isOverriden)
+        public Dictionary<string, string>? TranscodeFiles(Dictionary<string, string>? files, bool hasBom, bool hasSuffix)
         {
             if (files == null)
             {
@@ -184,7 +184,7 @@
             var convertedFiles = new Dictionary<string, string>();
             foreach (var file in files)
             {
-                var convertedFile = TranscodeFile(file, hasBom, isOverriden);
+                var convertedFile = TranscodeFile(file, hasBom, hasSuffix);
                 if (convertedFile != null)
                 {
                     convertedFiles.TryAdd(convertedFile, file.Value);
@@ -194,7 +194,7 @@
             return convertedFiles.Any() ? convertedFiles : null;
         }
 
-        private string? TranscodeFile(KeyValuePair<string, string> file, bool hasBom, bool isOverriden)
+        private string? TranscodeFile(KeyValuePair<string, string> file, bool hasBom, bool hasSuffix)
         {
             try
             {
@@ -210,8 +210,8 @@
                 var originalFileBytes = fileManager.FileToByteStream(file.Key);
                 // 转换字节流
                 var targetFileBytes = transcode.TranscodeByteStream(originalFileBytes);
-                // 不覆盖原文件
-                if (!isOverriden)
+                // 文件名添加后缀
+                if (hasSuffix)
                 {
                     // 指定目标文件名中的后缀，与是否包含 BOM 有关
                     var suffix = " - [UTF-8" + (hasBom ? " with BOM" : string.Empty) + "]";
@@ -253,19 +253,19 @@
         }
 
         /* 转换指定路径的文件，并返回转换后的文件保存在服务上的路径 */
-        public string[]? TranscodeFiles(IEnumerable<string>? files, bool hasBom, bool isOverriden)
+        public string[]? TranscodeFiles(IEnumerable<string>? files, bool hasBom, bool hasSuffix)
         {
             if (files == null)
             {
                 return null;
             }
 
-            var convertedFiles = TrimNull(files.Select(file => TranscodeFile(file, hasBom, isOverriden)));
+            var convertedFiles = TrimNull(files.Select(file => TranscodeFile(file, hasBom, hasSuffix)));
             // 若至少有一个文件转换成功，返回转换后的文件保存在服务上的路径；否则返回空
             return convertedFiles.Any() ? convertedFiles.ToArray() : null;
         }
 
-        private string? TranscodeFile(string file, bool hasBom, bool isOverriden)
+        private string? TranscodeFile(string file, bool hasBom, bool hasSuffix)
         {
             try
             {
@@ -281,8 +281,8 @@
                 var originalFileBytes = fileManager.FileToByteStream(file);
                 // 转换字节流
                 var targetFileBytes = transcode.TranscodeByteStream(originalFileBytes);
-                // 不覆盖原文件
-                if (!isOverriden)
+                // 文件名添加后缀
+                if (hasSuffix)
                 {
                     // 指定目标文件名中的后缀，与是否包含 BOM 有关
                     var suffix = " - [UTF-8" + (hasBom ? " with BOM" : string.Empty) + "]";

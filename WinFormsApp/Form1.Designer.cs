@@ -47,6 +47,7 @@
             this.checkBox_override = new System.Windows.Forms.CheckBox();
             this.checkBox_sameOutput = new System.Windows.Forms.CheckBox();
             this.checkBox_openOutput = new System.Windows.Forms.CheckBox();
+            this.checkBox_fileSuffix = new System.Windows.Forms.CheckBox();
             this.button_convert = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -81,7 +82,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1083, 296);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1269, 296);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // label_file
@@ -127,7 +128,7 @@
             this.textBox_file.Location = new System.Drawing.Point(165, 31);
             this.textBox_file.Name = "textBox_file";
             this.textBox_file.ReadOnly = true;
-            this.textBox_file.Size = new System.Drawing.Size(697, 35);
+            this.textBox_file.Size = new System.Drawing.Size(883, 35);
             this.textBox_file.TabIndex = 4;
             // 
             // textBox_directory
@@ -137,7 +138,7 @@
             this.textBox_directory.Location = new System.Drawing.Point(165, 129);
             this.textBox_directory.Name = "textBox_directory";
             this.textBox_directory.ReadOnly = true;
-            this.textBox_directory.Size = new System.Drawing.Size(697, 35);
+            this.textBox_directory.Size = new System.Drawing.Size(883, 35);
             this.textBox_directory.TabIndex = 5;
             // 
             // textBox_output
@@ -147,7 +148,7 @@
             this.textBox_output.Location = new System.Drawing.Point(165, 228);
             this.textBox_output.Name = "textBox_output";
             this.textBox_output.ReadOnly = true;
-            this.textBox_output.Size = new System.Drawing.Size(697, 35);
+            this.textBox_output.Size = new System.Drawing.Size(883, 35);
             this.textBox_output.TabIndex = 6;
             // 
             // button_file
@@ -167,7 +168,7 @@
             this.button_chooseDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.button_chooseDirectory.AutoSize = true;
             this.button_chooseDirectory.Font = new System.Drawing.Font("Microsoft YaHei UI", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button_chooseDirectory.Location = new System.Drawing.Point(868, 127);
+            this.button_chooseDirectory.Location = new System.Drawing.Point(1054, 127);
             this.button_chooseDirectory.Name = "button_chooseDirectory";
             this.button_chooseDirectory.Size = new System.Drawing.Size(102, 40);
             this.button_chooseDirectory.TabIndex = 8;
@@ -179,7 +180,7 @@
             this.button_chooseOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.button_chooseOutput.AutoSize = true;
             this.button_chooseOutput.Font = new System.Drawing.Font("Microsoft YaHei UI", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button_chooseOutput.Location = new System.Drawing.Point(868, 226);
+            this.button_chooseOutput.Location = new System.Drawing.Point(1054, 226);
             this.button_chooseOutput.Name = "button_chooseOutput";
             this.button_chooseOutput.Size = new System.Drawing.Size(102, 40);
             this.button_chooseOutput.TabIndex = 9;
@@ -191,7 +192,7 @@
             this.button_openDirectory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.button_openDirectory.AutoSize = true;
             this.button_openDirectory.Font = new System.Drawing.Font("Microsoft YaHei UI", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button_openDirectory.Location = new System.Drawing.Point(976, 127);
+            this.button_openDirectory.Location = new System.Drawing.Point(1162, 127);
             this.button_openDirectory.Name = "button_openDirectory";
             this.button_openDirectory.Size = new System.Drawing.Size(104, 40);
             this.button_openDirectory.TabIndex = 10;
@@ -203,7 +204,7 @@
             this.button_openOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.button_openOutput.AutoSize = true;
             this.button_openOutput.Font = new System.Drawing.Font("Microsoft YaHei UI", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button_openOutput.Location = new System.Drawing.Point(976, 226);
+            this.button_openOutput.Location = new System.Drawing.Point(1162, 226);
             this.button_openOutput.Name = "button_openOutput";
             this.button_openOutput.Size = new System.Drawing.Size(104, 40);
             this.button_openOutput.TabIndex = 11;
@@ -216,7 +217,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel2.AutoSize = true;
             this.tableLayoutPanel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.tableLayoutPanel2.ColumnCount = 6;
+            this.tableLayoutPanel2.ColumnCount = 7;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -228,12 +230,13 @@
             this.tableLayoutPanel2.Controls.Add(this.checkBox_override, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.checkBox_sameOutput, 3, 0);
             this.tableLayoutPanel2.Controls.Add(this.checkBox_openOutput, 4, 0);
-            this.tableLayoutPanel2.Controls.Add(this.button_convert, 5, 0);
+            this.tableLayoutPanel2.Controls.Add(this.checkBox_fileSuffix, 5, 0);
+            this.tableLayoutPanel2.Controls.Add(this.button_convert, 6, 0);
             this.tableLayoutPanel2.Location = new System.Drawing.Point(21, 349);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(1083, 54);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(1269, 54);
             this.tableLayoutPanel2.TabIndex = 12;
             // 
             // checkBox_bom
@@ -245,7 +248,7 @@
             this.checkBox_bom.Name = "checkBox_bom";
             this.checkBox_bom.Size = new System.Drawing.Size(134, 34);
             this.checkBox_bom.TabIndex = 13;
-            this.checkBox_bom.Text = "提供 BOM";
+            this.checkBox_bom.Text = "包含 BOM";
             // 
             // checkBox_recur
             // 
@@ -293,6 +296,17 @@
             this.checkBox_openOutput.TabIndex = 17;
             this.checkBox_openOutput.Text = "转换成功后打开文件夹";
             // 
+            // checkBox_fileSuffix
+            // 
+            this.checkBox_fileSuffix.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.checkBox_fileSuffix.AutoSize = true;
+            this.checkBox_fileSuffix.Font = new System.Drawing.Font("Microsoft YaHei UI", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.checkBox_fileSuffix.Location = new System.Drawing.Point(932, 10);
+            this.checkBox_fileSuffix.Name = "checkBox_fileSuffix";
+            this.checkBox_fileSuffix.Size = new System.Drawing.Size(186, 34);
+            this.checkBox_fileSuffix.TabIndex = 18;
+            this.checkBox_fileSuffix.Text = "文件名添加后缀";
+            // 
             // button_convert
             // 
             this.button_convert.Anchor = System.Windows.Forms.AnchorStyles.Right;
@@ -300,10 +314,10 @@
             this.button_convert.BackColor = System.Drawing.SystemColors.MenuHighlight;
             this.button_convert.Font = new System.Drawing.Font("Microsoft YaHei UI", 13.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.button_convert.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.button_convert.Location = new System.Drawing.Point(956, 3);
+            this.button_convert.Location = new System.Drawing.Point(1142, 3);
             this.button_convert.Name = "button_convert";
             this.button_convert.Size = new System.Drawing.Size(124, 48);
-            this.button_convert.TabIndex = 18;
+            this.button_convert.TabIndex = 19;
             this.button_convert.Text = "转换";
             this.button_convert.Click += new System.EventHandler(this.button_convert_Click);
             // 
@@ -312,7 +326,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(1121, 420);
+            this.ClientSize = new System.Drawing.Size(1307, 420);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.tableLayoutPanel2);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -348,6 +362,7 @@
         private CheckBox checkBox_override;
         private CheckBox checkBox_sameOutput;
         private CheckBox checkBox_openOutput;
+        private CheckBox checkBox_fileSuffix;
         private Button button_convert;
     }
 }
