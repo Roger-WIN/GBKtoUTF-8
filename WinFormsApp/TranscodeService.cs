@@ -29,7 +29,10 @@
             foreach (var file in files)
             {
                 var uploadedFile = UploadFile(file);
-                uploadedFiles.TryAdd(uploadedFile, file.Value);
+                if (uploadedFile != null)
+                {
+                    uploadedFiles.TryAdd(uploadedFile, file.Value);
+                }
             }
             // 若至少有一个文件上传成功，返回其在服务上保存的路径；否则返回空
             return uploadedFiles.Any() ? uploadedFiles : null;
@@ -182,7 +185,10 @@
             foreach (var file in files)
             {
                 var convertedFile = TranscodeFile(file, hasBom, isOverriden);
-                convertedFiles.TryAdd(convertedFile, file.Value);
+                if (convertedFile != null)
+                {
+                    convertedFiles.TryAdd(convertedFile, file.Value);
+                }
             }
             // 若至少有一个文件上传成功，返回其在服务上保存的路径；否则返回空
             return convertedFiles.Any() ? convertedFiles : null;
