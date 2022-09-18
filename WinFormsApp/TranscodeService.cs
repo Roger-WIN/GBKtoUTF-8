@@ -16,6 +16,10 @@
 
         private readonly Transcode transcode = new Transcode();
 
+        private readonly string EmptyStr = string.Empty;
+        private readonly string[] EmptyStrArr = Array.Empty<string>();
+        private readonly Dictionary<string, string> EmptyStrDic = new Dictionary<string, string>();
+
         public TranscodeService()
         {
             Directory.CreateDirectory(DIR_FOR_UPLOADED_FILES);
@@ -23,19 +27,27 @@
         }
 
         /* 上传文件，返回这些文件在服务上保存的路径 */
-        public Dictionary<string, string>? UploadFiles(Dictionary<string, string> files)
+        public Dictionary<string, string> UploadFiles(Dictionary<string, string> files)
         {
             var uploadedFiles = new Dictionary<string, string>();
             foreach (var file in files)
             {
                 var uploadedFile = UploadFile(file);
-                if (uploadedFile != null)
+                if (!string.IsNullOrWhiteSpace(uploadedFile))
                 {
                     uploadedFiles.TryAdd(uploadedFile, file.Value);
                 }
             }
-            // 若至少有一个文件上传成功，返回其在服务上保存的路径；否则返回空
-            return uploadedFiles.Any() ? uploadedFiles : null;
+            // 返回上传文件在服务上保存的路径
+            return uploadedFiles;
+        }
+
+        /* 上传文件，返回这些文件在服务上保存的路径 */
+        public string[] UploadFiles(IEnumerable<string> files)
+        {
+            var uploadedFiles = TrimNull(files.Select(file => UploadFile(file)));
+            // 返回上传文件在服务上保存的路径
+            return uploadedFiles.ToArray();
         }
 
         private string UploadFile(KeyValuePair<string, string> file)
@@ -72,14 +84,6 @@
             }
         }
 
-        /* 上传文件，返回这些文件在服务上保存的路径 */
-        public string[]? UploadFiles(IEnumerable<string> files)
-        {
-            var uploadedFiles = TrimNull(files.Select(file => UploadFile(file)));
-            // 若至少有一个文件上传成功，返回其在服务上保存的路径；否则返回空
-            return uploadedFiles.Any() ? uploadedFiles.ToArray() : null;
-        }
-
         private string UploadFile(string file)
         {
             try
@@ -110,7 +114,7 @@
         }
 
         /* 上传文件夹，返回其中的文件在服务上保存的路径。若为空目录，返回空 */
-        public Dictionary<string, string>? UploadFolder(string folderPath, bool isRecursive)
+        public Dictionary<string, string> UploadFolder(string folderPath, bool isRecursive)
         {
             // 目录不存在
             if (!Directory.Exists(folderPath))
@@ -135,7 +139,7 @@
             }
 
             // 该目录不为空
-            if (files.Any())
+            if (IsCollectionNotBlank(files))
             {
                 fileDirs = FetchFolderRelaDirs(folder, files);
             }
@@ -156,14 +160,14 @@
         {
             // 获取子文件，并添加到集合中
             var files = dir.GetFiles();
-            if (files.Any())
+            if (IsCollectionNotBlank(files))
             {
                 fileList.AddRange(files);
             }
 
             // 获取子文件夹
             var subDirs = dir.GetDirectories();
-            if (subDirs.Any())
+            if (IsCollectionNotBlank(subDirs))
             {
                 // 对每个子文件夹递归执行当前方法
                 Array.ForEach(subDirs, subDir => FetchFolderFiles(subDir, fileList));
@@ -171,37 +175,50 @@
         }
 
         // 获取文件夹下的子文件夹
-        private Dictionary<string, string>? FetchFolderRelaDirs(DirectoryInfo root, IEnumerable<FileInfo> fileList) => fileList.ToDictionary(file => file.FullName, file => Path.GetRelativePath(root.FullName, file.Directory.FullName));
+        private Dictionary<string, string> FetchFolderRelaDirs(DirectoryInfo root, IEnumerable<FileInfo> fileList) => fileList.ToDictionary(file => file.FullName, file => Path.GetRelativePath(root.FullName, file.Directory.FullName));
 
         /* 转换指定路径的文件，并返回转换后的文件保存在服务上的路径 */
-        public Dictionary<string, string>? TranscodeFiles(Dictionary<string, string>? files, bool hasBom, bool hasSuffix)
+        public Dictionary<string, string> TranscodeFiles(Dictionary<string, string> files, bool hasBom, bool hasSuffix)
         {
-            if (files == null)
+            if (IsDictionaryBlank(files))
             {
-                return null;
+                return EmptyStrDic;
             }
 
             var convertedFiles = new Dictionary<string, string>();
             foreach (var file in files)
             {
                 var convertedFile = TranscodeFile(file, hasBom, hasSuffix);
-                if (convertedFile != null)
+                if (!string.IsNullOrWhiteSpace(convertedFile))
                 {
                     convertedFiles.TryAdd(convertedFile, file.Value);
                 }
             }
-            // 若至少有一个文件上传成功，返回其在服务上保存的路径；否则返回空
-            return convertedFiles.Any() ? convertedFiles : null;
+            // 返回转换文件在服务上保存的路径
+            return convertedFiles;
         }
 
-        private string? TranscodeFile(KeyValuePair<string, string> file, bool hasBom, bool hasSuffix)
+        /* 转换指定路径的文件，并返回转换后的文件保存在服务上的路径 */
+        public string[] TranscodeFiles(IEnumerable<string> files, bool hasBom, bool hasSuffix)
+        {
+            if (IsCollectionBlank(files))
+            {
+                return EmptyStrArr;
+            }
+
+            var convertedFiles = TrimNull(files.Select(file => TranscodeFile(file, hasBom, hasSuffix)));
+            // 若至少有一个文件转换成功，返回转换后的文件保存在服务上的路径；否则返回空
+            return convertedFiles.ToArray();
+        }
+
+        private string TranscodeFile(KeyValuePair<string, string> file, bool hasBom, bool hasSuffix)
         {
             try
             {
                 // 该文件不是文本文件
                 if (!fileManager.IsTextFile(file.Key))
                 {
-                    return null;
+                    return EmptyStr;
                 }
 
                 // 获取原文件的文件名（包含扩展名）
@@ -252,27 +269,14 @@
             }
         }
 
-        /* 转换指定路径的文件，并返回转换后的文件保存在服务上的路径 */
-        public string[]? TranscodeFiles(IEnumerable<string>? files, bool hasBom, bool hasSuffix)
-        {
-            if (files == null)
-            {
-                return null;
-            }
-
-            var convertedFiles = TrimNull(files.Select(file => TranscodeFile(file, hasBom, hasSuffix)));
-            // 若至少有一个文件转换成功，返回转换后的文件保存在服务上的路径；否则返回空
-            return convertedFiles.Any() ? convertedFiles.ToArray() : null;
-        }
-
-        private string? TranscodeFile(string file, bool hasBom, bool hasSuffix)
+        private string TranscodeFile(string file, bool hasBom, bool hasSuffix)
         {
             try
             {
                 // 该文件不是文本文件
                 if (!fileManager.IsTextFile(file))
                 {
-                    return null;
+                    return EmptyStr;
                 }
 
                 // 获取原文件的文件名（包含扩展名）
@@ -319,9 +323,9 @@
         }
 
         /* 从服务上的指定路径下载文件 */
-        public void DownLoadFiles(Dictionary<string, string>? files, string? downloadPath)
+        public void DownLoadFiles(Dictionary<string, string> files, string downloadPath)
         {
-            if (files != null)
+            if (IsDictionaryNotBlank(files))
             {
                 foreach (var file in files)
                 {
@@ -330,7 +334,16 @@
             }
         }
 
-        private void DownLoadFile(KeyValuePair<string, string> file, string? downloadPath)
+        /* 从服务上的指定路径下载文件 */
+        public void DownLoadFiles(IEnumerable<string> files, string downloadPath)
+        {
+            if (IsCollectionNotBlank(files))
+            {
+                Array.ForEach(files.ToArray(), file => DownLoadFile(file, downloadPath));
+            }
+        }
+
+        private void DownLoadFile(KeyValuePair<string, string> file, string downloadPath)
         {
             if (!Directory.Exists(downloadPath))
             {
@@ -363,16 +376,7 @@
             }
         }
 
-        /* 从服务上的指定路径下载文件 */
-        public void DownLoadFiles(IEnumerable<string>? files, string? downloadPath)
-        {
-            if (files != null)
-            {
-                Array.ForEach(files.ToArray(), file => DownLoadFile(file, downloadPath));
-            }
-        }
-
-        private void DownLoadFile(string file, string? downloadPath)
+        private void DownLoadFile(string file, string downloadPath)
         {
             if (!Directory.Exists(downloadPath))
             {
@@ -416,6 +420,60 @@
         }
 
         /* 从集合中移除空元素 */
-        private IEnumerable<T> TrimNull<T>(IEnumerable<T> collection) => collection.Where(c => c != null);
+        private IEnumerable<T> TrimNull<T>(IEnumerable<T> collection) => collection.Where(c =>
+        {
+            if (c is string)
+            {
+                return !string.IsNullOrWhiteSpace(c as string);
+            }
+            else
+            {
+                return c != null;
+            }
+        });
+
+        private bool IsCollectionNotBlank<T>(IEnumerable<T> c)
+        {
+            return c != null && c.Any() && c.All(ele =>
+            {
+                if (ele is IEnumerable<T>)
+                {
+                    return IsCollectionNotBlank(ele as IEnumerable<T>);
+                }
+                else if (ele is string)
+                {
+                    return !string.IsNullOrWhiteSpace(ele as string);
+                }
+                else
+                {
+                    return ele != null;
+                }
+            });
+        }
+
+        private bool IsCollectionBlank<T>(IEnumerable<T> c)
+        {
+            return !IsCollectionNotBlank(c);
+        }
+
+        private bool IsDictionaryNotBlank<K, V>(Dictionary<K, V> dic)
+        {
+            return dic != null && dic.Any() && dic.Values.All(ele =>
+            {
+                if (ele is string)
+                {
+                    return !string.IsNullOrWhiteSpace(ele as string);
+                }
+                else
+                {
+                    return ele != null;
+                }
+            });
+        }
+
+        private bool IsDictionaryBlank<K, V>(Dictionary<K, V> dic)
+        {
+            return !IsDictionaryNotBlank(dic);
+        }
     }
 }

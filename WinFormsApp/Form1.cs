@@ -1,27 +1,35 @@
-using System.Diagnostics;
+ï»¿using System.Diagnostics;
+using System.Text;
 
 namespace WinFormsApp
 {
     public partial class Form1 : Form
     {
-        private string[]? Files; // ×ª»»ÎÄ¼şÂ·¾¶
-        private string? Directory; // ×ª»»ÎÄ¼ş¼ĞÂ·¾¶
-        private string? Output; // Êä³öÎÄ¼ş¼ĞÂ·¾¶
-        private string? OriginalOutput;
+        private string[] Files; // è½¬æ¢æ–‡ä»¶è·¯å¾„
+        private string Directory; // è½¬æ¢æ–‡ä»¶å¤¹è·¯å¾„
+        private string Output; // è¾“å‡ºæ–‡ä»¶å¤¹è·¯å¾„
+        private string OriginalOutput;
         private bool SameOutputEverChecked;
+        private readonly string EmptyStr = string.Empty;
+        private readonly string[] EmptyStrArr = Array.Empty<string>();
 
         private static TranscodeService service = new TranscodeService();
 
         public Form1()
         {
+            Files = EmptyStrArr;
+            Directory = EmptyStr;
+            Output = EmptyStr;
+            OriginalOutput = EmptyStr;
+
             InitializeComponent();
         }
 
-        public void ShowFiles(string[]? files)
+        public void ShowFiles(string[] files)
         {
-            if (files == null) // Î´Ñ¡È¡ÎÄ¼şÊ±£¬½áÊø
+            if (IsArrayBlank(files)) // æœªé€‰å–æ–‡ä»¶æ—¶ï¼Œç»“æŸ
             {
-                Files = null;
+                Files = EmptyStrArr;
                 textBox_file.Clear();
                 return;
             }
@@ -29,31 +37,33 @@ namespace WinFormsApp
             textBox_file.Clear();
             var count = files.Length;
 
-            // ÏÂÃæÔÚÎÄ±¾¿òÖĞÏÔÊ¾Ñ¡È¡µÄÈô¸ÉÎÄ¼şµÄÎÄ¼şÃû
-            if (count == 1) // ÈôÖ»ÓĞÒ»¸öÎÄ¼ş
+            // ä¸‹é¢åœ¨æ–‡æœ¬æ¡†ä¸­æ˜¾ç¤ºé€‰å–çš„è‹¥å¹²æ–‡ä»¶çš„æ–‡ä»¶å
+            if (count == 1) // è‹¥åªæœ‰ä¸€ä¸ªæ–‡ä»¶
             {
-                textBox_file.Text = files[0]; // Ö±½ÓÏÔÊ¾ÎÄ¼şÃû
+                textBox_file.Text = files[0]; // ç›´æ¥æ˜¾ç¤ºæ–‡ä»¶å
             }
-
-            else // Èô²»Ö¹Ò»¸öÎÄ¼ş
+            else // è‹¥ä¸æ­¢ä¸€ä¸ªæ–‡ä»¶
             {
                 for (var i = 0; i < count; i++)
                 {
-                    textBox_file.Text += "\"" + files[i] + "\""; // ÔÚÎÄ¼şÃûÁ½±ß¼ÓÉÏ°ë½ÇÒıºÅ
-                    if (i >= count - 1)
-                        continue;
-                    textBox_file.Text += " "; // Ê¹ÓÃ¿Õ¸ñ·Ö¸ô¸÷ÎÄ¼şÃû
+                    var text = new StringBuilder(textBox_file.Text);
+                    text.Append('\"').Append(files[i]).Append('\"'); // åœ¨æ–‡ä»¶åä¸¤è¾¹åŠ ä¸ŠåŠè§’å¼•å·
+                    if (i < count - 1)
+                    {
+                        text.Append(' '); // ä½¿ç”¨ç©ºæ ¼åˆ†éš”å„æ–‡ä»¶å
+                    }
+                    textBox_file.Text = text.ToString();
                 }
             }
 
-            ShowDirectory(null); // ×ª»»ÎÄ¼şºÍ×ª»»ÎÄ¼ş¼Ğ²»¿ÉÍ¬Ê±Ñ¡Ôñ
+            ShowDirectory(EmptyStr); // è½¬æ¢æ–‡ä»¶å’Œè½¬æ¢æ–‡ä»¶å¤¹ä¸å¯åŒæ—¶é€‰æ‹©
         }
 
-        public void ShowDirectory(string? directory)
+        public void ShowDirectory(string directory)
         {
-            if (directory == null) // Î´Ñ¡È¡Ä¿Â¼Ê±£¬Ö±½Ó½áÊø
+            if (string.IsNullOrWhiteSpace(directory)) // æœªé€‰å–ç›®å½•æ—¶ï¼Œç›´æ¥ç»“æŸ
             {
-                Directory = null;
+                Directory = EmptyStr;
                 textBox_directory.Clear();
                 return;
             }
@@ -61,14 +71,14 @@ namespace WinFormsApp
             textBox_directory.Clear();
             textBox_directory.Text = directory;
 
-            ShowFiles(null); // ×ª»»ÎÄ¼şºÍ×ª»»ÎÄ¼ş¼Ğ²»¿ÉÍ¬Ê±Ñ¡Ôñ
+            ShowFiles(EmptyStrArr); // è½¬æ¢æ–‡ä»¶å’Œè½¬æ¢æ–‡ä»¶å¤¹ä¸å¯åŒæ—¶é€‰æ‹©
         }
 
-        public void ShowOutput(string? output)
+        public void ShowOutput(string output)
         {
-            if (output == null && !SameOutputEverChecked) // Î´Ñ¡È¡Êä³öÄ¿Â¼Ê±£¬Ö±½Ó½áÊø
+            if (string.IsNullOrWhiteSpace(output) && !SameOutputEverChecked) // æœªé€‰å–è¾“å‡ºç›®å½•æ—¶ï¼Œç›´æ¥ç»“æŸ
             {
-                Output = null;
+                Output = EmptyStr;
                 textBox_output.Clear();
                 return;
             }
@@ -81,15 +91,15 @@ namespace WinFormsApp
         {
             var fileDialog = new OpenFileDialog
             {
-                Multiselect = true, // ÔÊĞíÑ¡Ôñ¶à¸öÎÄ¼ş
-                Title = "Ñ¡Ôñ´ı×ª»»ÎÄ¼ş",
-                Filter = "ËùÓĞÎÄ¼ş(*.*)|*.*"
-            }; // ´ò¿ªÎÄ¼ş¶Ô»°¿ò
-            Files = (fileDialog.ShowDialog() == DialogResult.OK) ? fileDialog.FileNames : null;
+                Multiselect = true, // å…è®¸é€‰æ‹©å¤šä¸ªæ–‡ä»¶
+                Title = "é€‰æ‹©å¾…è½¬æ¢æ–‡ä»¶",
+                Filter = "æ‰€æœ‰æ–‡ä»¶(*.*)|*.*"
+            }; // æ‰“å¼€æ–‡ä»¶å¯¹è¯æ¡†
+            Files = (fileDialog.ShowDialog() == DialogResult.OK) ? fileDialog.FileNames : EmptyStrArr;
             ShowFiles(Files);
-            if (checkBox_sameOutput.Checked && Files != null) // Ñ¡ÔñÁËÊä³öµ½ÏàÍ¬ÎÄ¼ş¼Ğ
+            if (checkBox_sameOutput.Checked && IsArrayNotBlank(Files)) // é€‰æ‹©äº†è¾“å‡ºåˆ°ç›¸åŒæ–‡ä»¶å¤¹
             {
-                Output = Path.GetDirectoryName(Files[0]);
+                Output = DirectoryName(Files[0]);
                 ShowOutput(Output);
             }
         }
@@ -98,12 +108,12 @@ namespace WinFormsApp
         {
             var folderDialog = new FolderBrowserDialog
             {
-                Description = "Ñ¡Ôñ´ı×ª»»ÎÄ¼ş¼Ğ",
-                ShowNewFolderButton = false // ²»ÔÊĞíÔÚ¸Ã¶Ô»°¿òÖĞĞÂ½¨ÎÄ¼ş¼Ğ
-            }; // ´ò¿ªÎÄ¼ş¼Ğ¶Ô»°¿ò
-            Directory = (folderDialog.ShowDialog() == DialogResult.OK) ? folderDialog.SelectedPath : null;
+                Description = "é€‰æ‹©å¾…è½¬æ¢æ–‡ä»¶å¤¹",
+                ShowNewFolderButton = false // ä¸å…è®¸åœ¨è¯¥å¯¹è¯æ¡†ä¸­æ–°å»ºæ–‡ä»¶å¤¹
+            }; // æ‰“å¼€æ–‡ä»¶å¤¹å¯¹è¯æ¡†
+            Directory = (folderDialog.ShowDialog() == DialogResult.OK) ? folderDialog.SelectedPath : EmptyStr;
             ShowDirectory(Directory);
-            if (checkBox_sameOutput.Checked) // Ñ¡ÔñÁËÊä³öµ½ÏàÍ¬ÎÄ¼ş¼Ğ
+            if (checkBox_sameOutput.Checked) // é€‰æ‹©äº†è¾“å‡ºåˆ°ç›¸åŒæ–‡ä»¶å¤¹
             {
                 Output = Directory;
                 ShowOutput(Output);
@@ -115,11 +125,11 @@ namespace WinFormsApp
             OriginalOutput = Output;
             var folderDialog = new FolderBrowserDialog
             {
-                Description = "Ñ¡ÔñÊä³öÎÄ¼ş¼Ğ"
-            }; // ´ò¿ªÎÄ¼ş¼Ğ¶Ô»°¿ò
-            Output = (folderDialog.ShowDialog() == DialogResult.OK) ? folderDialog.SelectedPath : null;
+                Description = "é€‰æ‹©è¾“å‡ºæ–‡ä»¶å¤¹"
+            }; // æ‰“å¼€æ–‡ä»¶å¤¹å¯¹è¯æ¡†
+            Output = (folderDialog.ShowDialog() == DialogResult.OK) ? folderDialog.SelectedPath : EmptyStr;
             ShowOutput(Output);
-            if (OriginalOutput != Output) // ¸ü¸ÄÁËÊä³öÎÄ¼ş¼Ğ
+            if (OriginalOutput != Output) // æ›´æ”¹äº†è¾“å‡ºæ–‡ä»¶å¤¹
             {
                 checkBox_sameOutput.Checked = false;
             }
@@ -129,46 +139,42 @@ namespace WinFormsApp
         {
             try
             {
-                if (Files != null) // ÒÑÑ¡È¡×ª»»ÎÄ¼ş
+                const string warn = "æ‚¨é€‰æ‹©çš„è¾“å‡ºæ–‡ä»¶å¤¹ä¸è¾“å…¥ç›®å½•ç›¸åŒï¼Œè¿™å¯èƒ½å¯¼è‡´æºæ–‡ä»¶è¢«é”™è¯¯è¦†ç›–ï¼æ˜¯å¦ç»§ç»­ï¼Ÿ", title = "ç›®å½•ç›¸åŒè­¦å‘Š";
+                var buttons = MessageBoxButtons.OKCancel;
+                var icon = MessageBoxIcon.Warning;
+                var defaultBtn = MessageBoxDefaultButton.Button2;
+
+                if (IsArrayNotBlank(Files)) // å·²é€‰å–è½¬æ¢æ–‡ä»¶
                 {
-                    // ²»¸²¸Ç£¬Ò²²»Ìí¼ÓÎÄ¼şÃûºó×º
+                    // ä¸è¦†ç›–ï¼Œä¹Ÿä¸æ·»åŠ æ–‡ä»¶ååç¼€
                     if (!checkBox_override.Checked && !checkBox_fileSuffix.Checked)
                     {
                         string?[] inputs = Files.Select(file => Path.GetDirectoryName(file)).Distinct().ToArray();
-                        if (inputs.Any() && inputs.Contains(Output))
+                        if (IsArrayNotBlank(inputs) && inputs.Contains(Output) && MessageBox.Show(warn, title, buttons, icon, defaultBtn) != DialogResult.OK)
                         {
-                            if (MessageBox.Show("ÄúÑ¡ÔñµÄÊä³öÎÄ¼ş¼ĞÓëÊäÈëÄ¿Â¼ÏàÍ¬£¬Õâ¿ÉÄÜµ¼ÖÂÔ´ÎÄ¼ş±»´íÎó¸²¸Ç£¡ÊÇ·ñ¼ÌĞø£¿", "Ä¿Â¼ÏàÍ¬¾¯¸æ", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) != DialogResult.OK)
-                            {
-                                return;
-                            }
+                            return;
                         }
                     }
 
                     service.DownLoadFiles(service.TranscodeFiles(service.UploadFiles(Files), checkBox_bom.Checked, checkBox_fileSuffix.Checked), Output);
                 }
-                else if (Directory != null) // ÒÑÑ¡È¡×ª»»ÎÄ¼ş¼Ğ
+                else if (!string.IsNullOrWhiteSpace(Directory)) // å·²é€‰å–è½¬æ¢æ–‡ä»¶å¤¹
                 {
-                    // ²»¸²¸Ç£¬Ò²²»Ìí¼ÓÎÄ¼şÃûºó×º
-                    if (!checkBox_override.Checked && !checkBox_fileSuffix.Checked)
+                    // ä¸è¦†ç›–ï¼Œä¹Ÿä¸æ·»åŠ æ–‡ä»¶ååç¼€
+                    if (!checkBox_override.Checked && !checkBox_fileSuffix.Checked && string.Equals(Directory, Output) && MessageBox.Show(warn, title, buttons, icon, defaultBtn) != DialogResult.OK)
                     {
-                        if (string.Equals(Directory, Output))
-                        {
-                            if (MessageBox.Show("ÄúÑ¡ÔñµÄÊä³öÎÄ¼ş¼ĞÓëÊäÈëÄ¿Â¼ÏàÍ¬£¬Õâ¿ÉÄÜµ¼ÖÂÔ´ÎÄ¼ş±»´íÎó¸²¸Ç£¡ÊÇ·ñ¼ÌĞø£¿", "Ä¿Â¼ÏàÍ¬¾¯¸æ", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) != DialogResult.OK)
-                            {
-                                return;
-                            }
-                        }
+                        return;
                     }
 
                     service.DownLoadFiles(service.TranscodeFiles(service.UploadFolder(Directory, checkBox_recur.Checked), checkBox_bom.Checked, checkBox_fileSuffix.Checked), Output);
                 }
-                else // ¶şÕß¾ùÎ´Ñ¡Ôñ
+                else // äºŒè€…å‡æœªé€‰æ‹©
                 {
-                    throw new ArgumentNullException("×ª»»ÎÄ¼şºÍ×ª»»ÎÄ¼ş¼Ğ¾ùÎ´Ñ¡Ôñ");
+                    throw new ArgumentNullException("è½¬æ¢æ–‡ä»¶å’Œè½¬æ¢æ–‡ä»¶å¤¹å‡æœªé€‰æ‹©");
                 }
 
-                MessageBox.Show("×ª»»³É¹¦£¡");
-                if (checkBox_openOutput.Checked && Output != null)
+                MessageBox.Show("è½¬æ¢æˆåŠŸï¼");
+                if (checkBox_openOutput.Checked)
                 {
                     Process.Start("Explorer.exe", Output);
                 }
@@ -181,7 +187,7 @@ namespace WinFormsApp
 
         private void button_openDirectory_Click(object sender, EventArgs e)
         {
-            if (Directory != null)
+            if (!string.IsNullOrWhiteSpace(Directory))
             {
                 Process.Start("Explorer.exe", Directory);
             }
@@ -189,26 +195,26 @@ namespace WinFormsApp
 
         private void button_openOutput_Click(object sender, EventArgs e)
         {
-            if (Output != null)
+            if (!string.IsNullOrWhiteSpace(Output))
             {
                 Process.Start("Explorer.exe", Output);
             }
         }
 
-        // TODO: ĞŞ¸´´Ë¸´Ñ¡¿òºÍÊä³öÎÄ¼ş¼ĞÔÚ¶àÖÖÇé¿öÏÂ¿ÉÄÜ´æÔÚµÄÏÔÊ¾´íÎóµÄÎÊÌâ
+        // TODO: ä¿®å¤æ­¤å¤é€‰æ¡†å’Œè¾“å‡ºæ–‡ä»¶å¤¹åœ¨å¤šç§æƒ…å†µä¸‹å¯èƒ½å­˜åœ¨çš„æ˜¾ç¤ºé”™è¯¯çš„é—®é¢˜
         private void checkBox_sameOutput_CheckedChanged(object sender, EventArgs e)
         {
-            if (!checkBox_sameOutput.Checked) // È¡Ïû¹´Ñ¡
+            if (!checkBox_sameOutput.Checked) // å–æ¶ˆå‹¾é€‰
             {
                 checkBox_override.Checked = false;
             }
 
-            if (Files != null || Directory != null)
+            if (IsArrayNotBlank(Files) || !string.IsNullOrWhiteSpace(Directory))
             {
                 if (checkBox_sameOutput.Checked)
                 {
                     OriginalOutput = Output;
-                    Output = (Files != null) ? Path.GetDirectoryName(Files[0]) : Directory;
+                    Output = IsArrayNotBlank(Files) ? DirectoryName(Files[0]) : Directory;
                     ShowOutput(Output);
 
                     SameOutputEverChecked = true;
@@ -232,6 +238,40 @@ namespace WinFormsApp
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             service.ClearTempFiles();
+        }
+
+        private bool IsArrayNotBlank<T>(T[] arr)
+        {
+            return arr != null && arr.Any() && arr.All(ele =>
+            {
+                if (ele is Array)
+                {
+                    return IsArrayNotBlank(ele as T[]);
+                }
+                else if (ele is string)
+                {
+                    return !string.IsNullOrWhiteSpace(ele as string);
+                }
+                else
+                {
+                    return ele != null;
+                }
+            });
+        }
+
+        private bool IsArrayBlank<T>(T[] arr)
+        {
+            return !IsArrayNotBlank(arr);
+        }
+
+        private string DirectoryName(string file)
+        {
+            string? dir = Path.GetDirectoryName(file);
+            if (string.IsNullOrWhiteSpace(dir))
+            {
+                dir = EmptyStr;
+            }
+            return dir;
         }
     }
 }
