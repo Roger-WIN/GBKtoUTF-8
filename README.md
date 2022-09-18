@@ -2,7 +2,7 @@
 
 这是一个将文本文件由 GBK 转码为 UTF-8 的小工具。
 
-![image-20211226121734405](https://img.rogerkung-win.top/undefinedimage-20211226121734405.png)
+![image-20211226121734405](https://img.rogerkung-win.top/undefinedundefinedimage-20220918165216008.png)
 
 可以选择多个文件，或者选择一个文件夹（支持在子文件夹中查找），但二者不可同时选择。
 
@@ -24,7 +24,7 @@ https://github.com/Roger-WIN/GBKtoUTF-8/releases
   | Windows 8.1  | [VC++ 2015~2019 运行库](https://aka.ms/vs/16/release/vc_redist.x64.exe) |
   |  Windows 7   | [VC++ 2015~2019 运行库](https://aka.ms/vs/16/release/vc_redist.x64.exe) |
 
-- [.NET 6 桌面运行时](https://dotnet.microsoft.com/zh-cn/download/dotnet/thank-you/runtime-desktop-6.0.1-windows-x64-installer)
+- [.NET 6 桌面运行时](https://dotnet.microsoft.com/zh-cn/download/dotnet/thank-you/runtime-desktop-6.0.9-windows-x64-installer)
 
 ## 开发等
 
