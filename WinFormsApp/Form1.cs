@@ -131,11 +131,36 @@ namespace WinFormsApp
             {
                 if (Files != null) // 已选取转换文件
                 {
-                    service.DownLoadFiles(service.TranscodeFiles(service.UploadFiles(Files), checkBox_bom.Checked, checkBox_override.Checked), Output);
+                    // 不覆盖，也不添加文件名后缀
+                    if (!checkBox_override.Checked && !checkBox_fileSuffix.Checked)
+                    {
+                        string?[] inputs = Files.Select(file => Path.GetDirectoryName(file)).Distinct().ToArray();
+                        if (inputs.Any() && inputs.Contains(Output))
+                        {
+                            if (MessageBox.Show("您选择的输出文件夹与输入目录相同，这可能导致源文件被错误覆盖！是否继续？", "目录相同警告", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) != DialogResult.OK)
+                            {
+                                return;
+                            }
+                        }
+                    }
+
+                    service.DownLoadFiles(service.TranscodeFiles(service.UploadFiles(Files), checkBox_bom.Checked, checkBox_fileSuffix.Checked), Output);
                 }
                 else if (Directory != null) // 已选取转换文件夹
                 {
-                    service.DownLoadFiles(service.TranscodeFiles(service.UploadFolder(Directory, checkBox_recur.Checked), checkBox_bom.Checked, checkBox_override.Checked), Output);
+                    // 不覆盖，也不添加文件名后缀
+                    if (!checkBox_override.Checked && !checkBox_fileSuffix.Checked)
+                    {
+                        if (string.Equals(Directory, Output))
+                        {
+                            if (MessageBox.Show("您选择的输出文件夹与输入目录相同，这可能导致源文件被错误覆盖！是否继续？", "目录相同警告", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) != DialogResult.OK)
+                            {
+                                return;
+                            }
+                        }
+                    }
+
+                    service.DownLoadFiles(service.TranscodeFiles(service.UploadFolder(Directory, checkBox_recur.Checked), checkBox_bom.Checked, checkBox_fileSuffix.Checked), Output);
                 }
                 else // 二者均未选择
                 {
