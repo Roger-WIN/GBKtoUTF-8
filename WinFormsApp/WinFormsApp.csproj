@@ -2,8 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows10.0.22000.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <TargetFramework>net6.0-windows10.0.22621.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
@@ -16,7 +15,7 @@
     <PackageProjectUrl>https://github.com/Roger-WIN/GBKtoUTF-8</PackageProjectUrl>
     <Authors>Roger-WIN</Authors>
     <Product>GBK 转 UTF-8</Product>
-    <Copyright>Copyright © 2021</Copyright>
+    <Copyright>Copyright © 2022</Copyright>
     <Description>GBK 转 UTF-8</Description>
     <NeutralLanguage>zh-CN</NeutralLanguage>
     <CodeAnalysisRuleSet>..\.sonarlint\roger-win_gbktoutf-8csharp.ruleset</CodeAnalysisRuleSet>
